@@ -1,0 +1,22 @@
+@import "./variables";
+
+// media queries
+@mixin tablet {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (min-width: 1280px) {
+    @content;
+  }
+}
+
+// General mixins:
+
+@mixin display-flex($direction, $justify, $align) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
