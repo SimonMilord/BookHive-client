@@ -2,7 +2,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import {
   Text,
   Container,
-  Stack,
+  HStack,
   ButtonGroup,
   IconButton,
 } from "@chakra-ui/react";
@@ -10,7 +10,7 @@ import {
 const Footer = (): JSX.Element => {
   return (
     <Container as="footer" role="contentinfo" py={{ base: "12", md: "16" }}>
-        <Stack justify="space-between" direction="row" align="center">
+        <HStack justify="space-between">
           <Text fontSize="sm" color="fg.subtle">
             &copy; {new Date().getFullYear()} SimonMilord
           </Text>
@@ -28,7 +28,7 @@ const Footer = (): JSX.Element => {
               icon={<FaGithub fontSize="1.25rem" />}
             />
           </ButtonGroup>
-        </Stack>
+        </HStack>
     </Container>
   );
 };
