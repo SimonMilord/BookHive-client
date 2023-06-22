@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import './App.scss';
 import HomePage from './pages/HomePage/HomePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import './styles/_variables.scss';
+import "./App.scss";
 
 export default function App() {
   const theme: Object = extendTheme({

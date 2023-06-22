@@ -1,22 +1,36 @@
-import Linkedin from '../../assets/Icons/linkedin.png';
-import Github from '../../assets/Icons/github.png';
-import { Flex } from '@chakra-ui/react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import {
+  Text,
+  Container,
+  Stack,
+  ButtonGroup,
+  IconButton,
+} from "@chakra-ui/react";
 
-export default function Footer() {
-  const linkedinLink: string = 'https://www.linkedin.com/in/simonmilord/';
-  const githubLink: string = 'https://github.com/SimonMilord';
-
+const Footer = (): JSX.Element => {
   return (
-    <div className='footer'>
-      <p>&copy; SimonMilord</p>
-      <Flex>
-        <a href={githubLink}>
-          <img src={Github} alt="Github" />
-        </a>
-        <a href={linkedinLink}>
-          <img src={Linkedin} alt="Linkedin" />
-        </a>
-      </Flex>
-    </div>
+    <Container as="footer" role="contentinfo" py={{ base: "12", md: "16" }}>
+        <Stack justify="space-between" direction="row" align="center">
+          <Text fontSize="sm" color="fg.subtle">
+            &copy; {new Date().getFullYear()} SimonMilord
+          </Text>
+          <ButtonGroup variant="tertiary">
+            <IconButton
+              as="a"
+              href="https://www.linkedin.com/in/simonmilord/"
+              aria-label="LinkedIn"
+              icon={<FaLinkedin fontSize="1.25rem" />}
+            />
+            <IconButton
+              as="a"
+              href="https://github.com/SimonMilord"
+              aria-label="GitHub"
+              icon={<FaGithub fontSize="1.25rem" />}
+            />
+          </ButtonGroup>
+        </Stack>
+    </Container>
   );
-}
+};
+
+export default Footer;
