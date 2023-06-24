@@ -1,5 +1,6 @@
 @import '../../styles/variables.scss';
 
 .homepage {
-  background-color: $primary;
-}
+  background-color: $primary; // to change later
+  min-height: 100vh;
+};

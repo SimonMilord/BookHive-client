@@ -1,9 +1,14 @@
+import { Heading } from "@chakra-ui/react";
 import "./Login.scss";
+import Footer from '../../components/Footer/footer';
+import Navbar from "../../components/NavBar/navBar";
 
 export default function LoginPage() {
   return (
     <div className='login'>
-      LOGIN!
+      <Navbar />
+      <Heading>LOGIN PAGE</Heading>
+      <Footer />
     </div>
   );
 }

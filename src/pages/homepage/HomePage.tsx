@@ -6,6 +6,8 @@ export default function HomePage() {
   return (
     <div className='homepage'>
       <Navbar />
+      <div className='content'>
+      </div>
       <Footer />
     </div>
   );
