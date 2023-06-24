@@ -1,31 +1,18 @@
-import {
-  Container,
-  HStack,
-  Heading,
-  Input,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-} from "@chakra-ui/react";
+import { Container, HStack, Heading } from "@chakra-ui/react";
+import NavMenu from "../NavMenu/navMenu";
+import SearchBar from "../SearchBar/searchBar";
+import { Link } from "react-router-dom";
 
 const Navbar = (): JSX.Element => {
   return (
-    <Container as="header" role="navigation">
+    <Container as="header" role="navigation" maxW="100%" px={10}>
       <HStack justify="space-between">
         {/* this is a placeholder for a logo maybe */}
-        <Heading color='#FFF'>BookHive</Heading>
-        <Input placeholder="this is a placeholder for searchbar component"></Input>
-        <Menu>
-          <MenuButton color='#FFF'>Simon</MenuButton>
-          <MenuList>
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>Settings</MenuItem>
-            <MenuDivider />
-            <MenuItem>Logout</MenuItem>
-          </MenuList>
-        </Menu>
+        <Link to="/">
+          <Heading color="#FFF">BookHive</Heading>
+        </Link>
+        <SearchBar />
+        <NavMenu />
       </HStack>
     </Container>
   );
