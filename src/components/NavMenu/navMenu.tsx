@@ -12,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FiChevronDown } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const NavMenu = (): JSX.Element => {
   return (
@@ -47,10 +48,16 @@ const NavMenu = (): JSX.Element => {
             bg={useColorModeValue("white", "gray.900")}
             borderColor={useColorModeValue("gray.200", "gray.700")}
           >
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>Settings</MenuItem>
+            <Link to="/profile">
+              <MenuItem>Profile</MenuItem>
+            </Link>
+            <Link to="/settings">
+              <MenuItem>Settings</MenuItem>
+            </Link>
             <MenuDivider />
-            <MenuItem>Sign out</MenuItem>
+            <Link to="/login">
+              <MenuItem>Sign out</MenuItem>
+            </Link>
           </MenuList>
         </Menu>
       </Flex>

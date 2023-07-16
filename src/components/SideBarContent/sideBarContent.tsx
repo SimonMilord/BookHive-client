@@ -13,19 +13,19 @@ import {
   FiTrendingUp,
   FiCompass,
   FiStar,
-  FiSettings,
 } from "react-icons/fi";
 
 interface LinkItemProps {
   name: string;
+  target: string;
   icon: IconType;
 }
+// to change later: destinations for links
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
+  { name: "Home", target: '#', icon: FiHome },
+  { name: "Trending", target: '#', icon: FiTrendingUp },
+  { name: "Explore", target: '#', icon: FiCompass },
+  { name: "Favourites", target: '#', icon: FiStar },
 ];
 
 interface SidebarProps extends BoxProps {
@@ -45,13 +45,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps): JSX.Element => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text fontSize="2xl" fontWeight="bold">
           BookHive
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} target={link.target}>
           {link.name}
         </NavItem>
       ))}

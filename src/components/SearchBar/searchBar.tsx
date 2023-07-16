@@ -1,13 +1,17 @@
-import { Input } from '@chakra-ui/react';
+import { SearchIcon } from "@chakra-ui/icons";
+import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 
 const SearchBar = (): JSX.Element => {
   // TODO: Write validation function / maybe create utils file
   const validateSearch = (value: string) => {};
 
   return (
-    <div>
-      <Input placeholder="Search" />
-    </div>
+    <InputGroup>
+      <InputLeftElement>
+        <SearchIcon />
+      </InputLeftElement>
+      <Input placeholder="Search..." size="md" width="md" />
+    </InputGroup>
   );
 };
 

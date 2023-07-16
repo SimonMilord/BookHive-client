@@ -4,12 +4,13 @@ import { IconType } from "react-icons";
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
+  target: string;
   children: ReactText;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps): JSX.Element => {
+const NavItem = ({ icon, children, target, ...rest }: NavItemProps): JSX.Element => {
   return (
     <Link
-      href="#"
+      href={target}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >

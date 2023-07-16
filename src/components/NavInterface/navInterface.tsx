@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import SidebarContent from "../SideBarContent/sideBarContent";
 import MobileNav from "../MobileNav/mobileNav";
+// import Footer from "../Footer/footer";
 
 export default function NavInterface({
   children,
@@ -39,6 +40,8 @@ export default function NavInterface({
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
+      {/* TO FIX LATER */}
+      {/* <Footer /> */}
     </Box>
   );
 }
