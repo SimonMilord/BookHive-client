@@ -1,12 +1,12 @@
-import Footer from '../../components/Footer/footer';
-import Navbar from '../../components/NavBar/navBar';
-import './HomePage.scss';
+import Footer from "../../components/Footer/footer";
+import NavInterface from "../../components/NavInterface/navInterface";
+import "./HomePage.scss";
 
 export default function HomePage() {
   return (
-    <div className='homepage'>
-      <Navbar />
-      <div className='content'>
+    <div className="homepage">
+      <div className="content">
+        <NavInterface children={undefined} />
       </div>
       <Footer />
     </div>
