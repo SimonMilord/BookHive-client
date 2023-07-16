@@ -9,6 +9,7 @@ import {
 import SidebarContent from "../SideBarContent/sideBarContent";
 import MobileNav from "../MobileNav/mobileNav";
 // import Footer from "../Footer/footer";
+import HomeContent from "../HomeContent/homeContent";
 
 export default function NavInterface({
   children,
@@ -16,6 +17,7 @@ export default function NavInterface({
   children: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
@@ -38,7 +40,8 @@ export default function NavInterface({
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+        {/* {children} */}
+        <HomeContent />
       </Box>
       {/* TO FIX LATER */}
       {/* <Footer /> */}

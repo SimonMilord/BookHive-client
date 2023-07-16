@@ -1,0 +1,32 @@
+import { Badge, Box, Heading, VStack } from "@chakra-ui/react";
+import ReadingCard from "../ReadingCard/readingCard";
+
+const HomeContent = (): JSX.Element => {
+  return (
+    <Box>
+      <Heading>
+        Reading
+        <Badge variant="solid" fontSize="1rem">
+          2
+        </Badge>
+      </Heading>
+      <VStack>
+        <ReadingCard />
+      </VStack>
+      <Heading>
+        To Read
+        <Badge variant="solid" fontSize="1rem">
+          4
+        </Badge>
+      </Heading>
+      <Heading>
+        Finished
+        <Badge variant="solid" fontSize="1rem">
+          0
+        </Badge>
+      </Heading>
+    </Box>
+  );
+};
+
+export default HomeContent;
