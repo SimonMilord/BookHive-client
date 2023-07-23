@@ -10,7 +10,7 @@ const SearchBar = (): JSX.Element => {
       <InputLeftElement>
         <SearchIcon />
       </InputLeftElement>
-      <Input placeholder="Search..." size="md" width="md" />
+      <Input placeholder="Search..." size="md" width="xl" />
     </InputGroup>
   );
 };

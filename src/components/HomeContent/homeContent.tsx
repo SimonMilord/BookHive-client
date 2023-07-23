@@ -6,7 +6,7 @@ const HomeContent = (): JSX.Element => {
     <Box>
       <Heading>
         Reading
-        <Badge variant="solid" fontSize="1rem">
+        <Badge variant="solid" fontSize="1rem" ml={2}>
           2
         </Badge>
       </Heading>
@@ -15,13 +15,13 @@ const HomeContent = (): JSX.Element => {
       </VStack>
       <Heading>
         To Read
-        <Badge variant="solid" fontSize="1rem">
+        <Badge variant="solid" fontSize="1rem" ml={2}>
           4
         </Badge>
       </Heading>
       <Heading>
         Finished
-        <Badge variant="solid" fontSize="1rem">
+        <Badge variant="solid" fontSize="1rem" ml={2}>
           0
         </Badge>
       </Heading>
