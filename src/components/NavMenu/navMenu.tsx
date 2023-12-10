@@ -25,11 +25,6 @@ const NavMenu = (): JSX.Element => {
             _focus={{ boxShadow: "none" }}
           >
             <HStack>
-              {/* NOT SURE IF I WANT TO ADD AVATAR YET (DEPENDS ON OAUTH) */}
-              {/* <Avatar
-                size={"sm"}
-                src={}
-              /> */}
               <VStack
                 display={{ base: "none", md: "flex" }}
                 alignItems="flex-start"

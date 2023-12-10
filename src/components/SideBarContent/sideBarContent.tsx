@@ -9,17 +9,16 @@ import {
 import NavItem from "../NavItem/navItem";
 import { IconType } from "react-icons";
 import { FiHome, FiTrendingUp, FiCompass, FiStar } from "react-icons/fi";
-import Footer from "../Footer/footer";
 
 interface LinkItemProps {
   name: string;
   target: string;
   icon: IconType;
 }
-// to change later: destinations for links
+// to change later: destinations for links for whatever sections we want
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", target: "#", icon: FiHome },
-  { name: "Trending", target: "#", icon: FiTrendingUp },
+  { name: "Trending", target: "/settings", icon: FiTrendingUp },
   { name: "Explore", target: "#", icon: FiCompass },
   { name: "Favourites", target: "#", icon: FiStar },
 ];
@@ -58,7 +57,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps): JSX.Element => {
             </NavItem>
           ))}
         </Box>
-        <Footer />
       </Flex>
     </Box>
   );

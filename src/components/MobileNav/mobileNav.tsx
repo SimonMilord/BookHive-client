@@ -4,12 +4,10 @@ import {
   useColorModeValue,
   IconButton,
   Text,
-  VStack,
-  Center,
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import NavMenu from "../NavMenu/navMenu";
-import SearchBar from "../SearchBar/searchBar";
+import SearchBox from "../SearchBox/searchBox";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -41,7 +39,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps): JSX.Element => {
       >
         BookHive
       </Text>
-      <SearchBar />
+      <SearchBox />
       <NavMenu />
     </Flex>
   );
