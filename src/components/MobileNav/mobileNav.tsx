@@ -22,7 +22,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps): JSX.Element => {
       bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent={{ base: "space-between", md: "flex-end" }}
+      justifyContent={{ base: "space-between", md: "space-between" }}
       {...rest}
     >
       <IconButton
