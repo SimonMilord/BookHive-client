@@ -29,6 +29,7 @@ export default function HomePage() {
   const getToReadBooks = async () => {
     setIsLoading(true);
     try {
+      // will need to refactor how I want to make those calls and the path once deployed
       const response = await fetch("http://localhost:8000/books/", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -81,7 +82,7 @@ export default function HomePage() {
                     <Spinner />
                   </Center>
                 ) : (
-                  <BookList booksArray={toReadBooks} />
+                  <BookList booksArray={toReadBooks}/>
                 )}
               </Box>
               <Box>
