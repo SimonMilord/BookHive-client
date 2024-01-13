@@ -34,11 +34,14 @@ const mockSearchResults: SearchResult[] = [
   }
 ];
 
+const mockQuery = 'J.R.R. Tolkien';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<HomePage />} />
-      <Route path="searchresults" element={<SearchResultsPage results={mockSearchResults}/>} />
+      {/* to change later */}
+      <Route path="searchresults" element={<SearchResultsPage results={mockSearchResults} query={mockQuery}/>} />
       <Route path="bookinfo/:id" element={<BookInfoPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />

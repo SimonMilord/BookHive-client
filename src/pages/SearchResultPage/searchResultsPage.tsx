@@ -10,9 +10,10 @@ import SearchResultList from "src/components/SearchResultList/searchResultList";
 
 interface SearchResultsProps {
   results: SearchResult[];
+  query: string;
 }
 
-const SearchResultsPage = ({results}: SearchResultsProps) => {
+const SearchResultsPage = ({results, query}: SearchResultsProps) => {
   const { onOpen, onClose } = useDisclosure();
 
   return (
@@ -25,7 +26,7 @@ const SearchResultsPage = ({results}: SearchResultsProps) => {
           />
           <MobileNav onOpen={onOpen} />
           <Box ml={{ base: 0, md: 60 }} p="4">
-            <SearchResultList results={results}/>
+            <SearchResultList results={results} query={query}/>
           </Box>
         </Box>
       </div>
