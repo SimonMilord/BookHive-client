@@ -1,3 +1,6 @@
+/**
+ * Type of the individual book. This is used in the bookInfoPage
+ */
 export type Book = {
   id: string | number,
   title: string,
@@ -14,4 +17,15 @@ export type Book = {
   finishedDate: string | null,
   readTime: string | number,
   progress: number,
+}
+
+/**
+ * Type of the results displayed in the SearchResultList after being searched
+ */
+export type SearchResult = {
+  image: string | null, // ?
+  title: string,
+  author: string,
+  pages: number,
+  excerpt: string,
 }

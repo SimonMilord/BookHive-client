@@ -1,6 +1,6 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import BookListItem from "../BookListItem/bookListItem";
-import { Book } from "src/types/book";
+import { Book } from "src/types/types";
 
 const imagePlaceholder =
   "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg";

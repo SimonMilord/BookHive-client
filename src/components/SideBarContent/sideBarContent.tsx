@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import NavItem from "../NavItem/navItem";
 import { IconType } from "react-icons";
-import { FiHome, FiTrendingUp, FiCompass, FiStar } from "react-icons/fi";
+import { FiHome, FiCompass, FiList, FiAward, FiActivity } from "react-icons/fi";
 
 interface LinkItemProps {
   name: string;
@@ -18,9 +18,10 @@ interface LinkItemProps {
 // to change later: destinations for links for whatever sections we want
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", target: "#", icon: FiHome },
-  { name: "Trending", target: "/settings", icon: FiTrendingUp },
-  { name: "Explore", target: "#", icon: FiCompass },
-  { name: "Favourites", target: "#", icon: FiStar },
+  { name: "Reading Stats", target: "/settings", icon: FiActivity },
+  { name: "Discover Books", target: "#", icon: FiCompass },
+  { name: "Custom Lists", target: "#", icon: FiList },
+  { name: "Achievements", target: "#", icon: FiAward},
 ];
 
 interface SidebarProps extends BoxProps {
