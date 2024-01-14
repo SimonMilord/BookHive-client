@@ -9,7 +9,6 @@ interface BookListProps {
   booksArray: Book[];
 }
 const BookList = ({ booksArray }: BookListProps): JSX.Element => {
-
   return (
     <Grid templateColumns="repeat(9, 1fr)" gap={3} my={6}>
       {booksArray &&

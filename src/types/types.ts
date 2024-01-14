@@ -23,9 +23,10 @@ export type Book = {
  * Type of the results displayed in the SearchResultList after being searched
  */
 export type SearchResult = {
-  image: string | null, // ?
+  image: string | undefined, // ?
   title: string,
   author: string,
   pages: number,
+  year: string | number,
   excerpt: string,
 }

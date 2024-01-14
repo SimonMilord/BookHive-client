@@ -12,7 +12,7 @@ const SearchResultList = ({ results, query }: SearchResultListProps) => {
     <Box className="searchResultList" h="80vh">
       <Text fontSize="xl">Search results for: <Text as='b'>{query}</Text></Text>
       {results.length !== 0 ? (
-        <List>
+        <List mt={4}>
           {results &&
             results.map((result: SearchResult, index: number) => {
               return (
