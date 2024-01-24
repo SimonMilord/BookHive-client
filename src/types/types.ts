@@ -6,17 +6,18 @@ export type Book = {
   title: string,
   author: string,
   image: string, // ?
-  status: string, // To Read, Started, Finished
+  status: string, // To Read, Started, Finished + maybe change that to enum?
   isbn: string,
   pageCount: number,
-  Language: string,
-  Subject: string,
-  Publisher: string,
+  language: string,
+  genre: string,
+  publisher: string,
   datePublished: string,
   startDate: string | null,
   finishedDate: string | null,
-  readTime: string | number,
-  progress: number,
+  excerpt: string,
+  rating: number | null,
+  notes: Note[],
 }
 
 /**
@@ -29,4 +30,13 @@ export type SearchResult = {
   pages: number,
   year: string | number,
   excerpt: string,
+}
+
+/**
+ * Type of the notes that can be added on a specific book
+ */
+export type Note = {
+  id: string,
+  date: string,
+  content: string,
 }

@@ -7,12 +7,13 @@ import "./App.scss";
 import LoginPage from "./pages/Login/Login";
 import BookInfoPage from "./pages/BookInfoPage/bookInfoPage";
 import SearchResultsPage from "./pages/SearchResultPage/searchResultsPage";
-import { SearchResult } from "./types/types";
+import { Book, SearchResult } from "./types/types";
 
 
 const mockSearchResults: SearchResult[] = [
   {
-    image: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg',
+    // image: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg',
+    image: 'https://covers.openlibrary.org/b/isbn/0261102214-M.jpg',
     title: 'The Hobbit',
     author: 'J.R.R. Tolkien',
     pages: 250,
@@ -39,13 +40,31 @@ const mockSearchResults: SearchResult[] = [
 
 const mockQuery = 'J.R.R. Tolkien';
 
+const mockBookData: Book = {
+  id: '1',
+  title: 'The Lord Of The Rings',
+  author: 'J.R.R. Tolkien',
+  image: "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg",
+  status: 'To Read',
+  isbn: '123456789',
+  pageCount: 899,
+  language: 'english',
+  genre: 'fantasy',
+  publisher: 'penguin',
+  datePublished: '1954',
+  startDate: null,
+  finishedDate: null,
+  excerpt: 'Since it was first published in 1954, The Lord of the Rings has been a book people have treasured. Steeped in unrivalled magic and otherworldliness, its sweeping fantasy and epic adventure has touched the hearts of young and old alike. Over 150 million copies of its many editions have been sold around the world, and occasional collectors’ editions become prized and valuable items of publishing.',
+  rating: 5,
+  notes: [{id: '1', date: 'feb 1 2024', content: 'I really enjoyed the book.'}],
+}
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<HomePage />} />
       {/* to change later */}
       <Route path="searchresults" element={<SearchResultsPage results={mockSearchResults} query={mockQuery}/>} />
-      <Route path="bookinfo/:id" element={<BookInfoPage />} />
+      <Route path="bookinfo/:id" element={<BookInfoPage book={mockBookData}/>} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>
