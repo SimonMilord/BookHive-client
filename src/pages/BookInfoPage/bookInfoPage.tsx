@@ -21,59 +21,69 @@ import { Link as ReactRouterLink } from "react-router-dom";
 import MobileNav from "src/components/MobileNav/mobileNav";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
-import { FaStar, FaRegStar } from 'react-icons/fa';
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
 import NotesList from "src/components/NotesList/notesList";
+import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
 
 interface BookInfoPageProps {
   book: Book;
 }
-// to change later and add to the book object
-const currentPage = 420;
 
 // need to get the book id from the params and then fetch the specific book data
 // from server?
 // check how to pass data from bookListItem to another page in react router
 const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
-  const { onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   // Possible values: To Read | Reading | Finished
-  const [bookStatus, setBookStatus] = useState('To Read');
-  const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState('Start');
-
+  const [bookStatus, setBookStatus] = useState<string>("To Read");
+  const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState<string>("Start");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const onStatusBtnClick = () => {
     switch (bookStatus) {
-      case 'To Read':
-        setBookStatus('Reading');
-        setBookStatusBtnLabel('Finish');
+      case "To Read":
+        setBookStatus("Reading");
+        setBookStatusBtnLabel("Finish");
         break;
-      case 'Reading':
-        setBookStatus('Finished');
-        setBookStatusBtnLabel('Read again');
+      case "Reading":
+        setBookStatus("Finished");
+        setBookStatusBtnLabel("Read again");
         break;
       default:
-        setBookStatus('To Read');
-        setBookStatusBtnLabel('Start');
+        setBookStatus("To Read");
+        setBookStatusBtnLabel("Start");
         break;
     }
   };
 
-  const onLogUpdate = () => {
-    // will open a modal which will allow to update the reading log
-    alert('Log updated + TODO :)');
-  }
-
   const getBookReadingDuration = (book: Book) => {
     const today: Date = new Date();
     // where startDate is a string : '2024-01-01' book.startDate
-    const startedDay: Date = new Date('2024-01-01');
+    const startedDay: Date = new Date("2024-01-01");
     const timeDifference: number = today.getTime() - startedDay.getTime();
-    const daysDifference: number = Math.floor(timeDifference/ (1000 * 60 * 60 * 24));
+    const daysDifference: number = Math.floor(
+      timeDifference / (1000 * 60 * 60 * 24)
+    );
     return daysDifference > 0 ? daysDifference : 0;
   };
 
   const readingLogDuration = getBookReadingDuration(book);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleLogUpdate = (value: number) => {
+    setCurrentPage(value);
+    setIsModalOpen(false);
+  }
 
   return (
     <div className="bookInfoPage">
@@ -113,7 +123,13 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     justifyContent="flex-end"
                   >
                     <ButtonGroup gap="2">
-                      <Button colorScheme="blue" className="bookInfoPage__changeStatusButton" onClick={onStatusBtnClick}>{bookStatusBtnLabel}</Button>
+                      <Button
+                        colorScheme="blue"
+                        className="bookInfoPage__changeStatusButton"
+                        onClick={onStatusBtnClick}
+                      >
+                        {bookStatusBtnLabel}
+                      </Button>
                       <ChakraLink
                         className="bookInfoPage__backButton"
                         as={ReactRouterLink}
@@ -142,7 +158,9 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     <Text>{bookStatus}</Text>
                   </GridItem>
                   <GridItem>
-                    <Heading size="sm">{bookStatus === 'Finished' ? 'Finished' : 'Started'}</Heading>
+                    <Heading size="sm">
+                      {bookStatus === "Finished" ? "Finished" : "Started"}
+                    </Heading>
                     <Text>{book.startDate ?? "Not started yet"}</Text>
                   </GridItem>
                   <GridItem>
@@ -155,10 +173,19 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Progress</Heading>
-                    <Text>{(currentPage/book.pageCount * 100).toFixed(2)}%</Text>
+                    <Text>
+                      {((currentPage / book.pageCount) * 100).toFixed(2)}%
+                    </Text>
                   </GridItem>
                   <GridItem display="flex" justifyContent="flex-end">
-                    <Button className="bookInfoPage__updateLogButton" onClick={onLogUpdate} colorScheme="blue">Update</Button>
+                    <Button
+                      className="bookInfoPage__updateLogButton"
+                      onClick={handleOpenModal}
+                      colorScheme="blue"
+                    >
+                      Update
+                    </Button>
+                    <UpdateLogModal isOpen={isModalOpen} onClose={handleCloseModal} onLogUpdate={handleLogUpdate} currentPage={currentPage}/>
                   </GridItem>
                 </Grid>
               </Box>
