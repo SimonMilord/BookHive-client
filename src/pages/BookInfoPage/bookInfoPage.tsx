@@ -23,10 +23,13 @@ import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { useState } from "react";
+import NotesList from "src/components/NotesList/notesList";
 
 interface BookInfoPageProps {
   book: Book;
 }
+// to change later and add to the book object
+const currentPage = 420;
 
 // need to get the book id from the params and then fetch the specific book data
 // from server?
@@ -34,6 +37,43 @@ interface BookInfoPageProps {
 const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
   const { onOpen, onClose } = useDisclosure();
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  // Possible values: To Read | Reading | Finished
+  const [bookStatus, setBookStatus] = useState('To Read');
+  const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState('Start');
+
+
+  const onStatusBtnClick = () => {
+    switch (bookStatus) {
+      case 'To Read':
+        setBookStatus('Reading');
+        setBookStatusBtnLabel('Finish');
+        break;
+      case 'Reading':
+        setBookStatus('Finished');
+        setBookStatusBtnLabel('Read again');
+        break;
+      default:
+        setBookStatus('To Read');
+        setBookStatusBtnLabel('Start');
+        break;
+    }
+  };
+
+  const onLogUpdate = () => {
+    // will open a modal which will allow to update the reading log
+    alert('Log updated + TODO :)');
+  }
+
+  const getBookReadingDuration = (book: Book) => {
+    const today: Date = new Date();
+    // where startDate is a string : '2024-01-01' book.startDate
+    const startedDay: Date = new Date('2024-01-01');
+    const timeDifference: number = today.getTime() - startedDay.getTime();
+    const daysDifference: number = Math.floor(timeDifference/ (1000 * 60 * 60 * 24));
+    return daysDifference > 0 ? daysDifference : 0;
+  };
+
+  const readingLogDuration = getBookReadingDuration(book);
 
   return (
     <div className="bookInfoPage">
@@ -73,7 +113,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     justifyContent="flex-end"
                   >
                     <ButtonGroup gap="2">
-                      <Button colorScheme="blue">Start</Button>
+                      <Button colorScheme="blue" className="bookInfoPage__changeStatusButton" onClick={onStatusBtnClick}>{bookStatusBtnLabel}</Button>
                       <ChakraLink
                         className="bookInfoPage__backButton"
                         as={ReactRouterLink}
@@ -99,26 +139,26 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 <Grid templateColumns="repeat(6, 1fr)" gap={6} my={5}>
                   <GridItem>
                     <Heading size="sm">Status</Heading>
-                    <Text>{book.status}</Text>
+                    <Text>{bookStatus}</Text>
                   </GridItem>
                   <GridItem>
-                    <Heading size="sm">Started</Heading>
+                    <Heading size="sm">{bookStatus === 'Finished' ? 'Finished' : 'Started'}</Heading>
                     <Text>{book.startDate ?? "Not started yet"}</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Read time</Heading>
-                    <Text>0 days</Text>
+                    <Text>{readingLogDuration} days</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Current page</Heading>
-                    <Text>8</Text>
+                    <Text>{currentPage}</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Progress</Heading>
-                    <Text>0%</Text>
+                    <Text>{(currentPage/book.pageCount * 100).toFixed(2)}%</Text>
                   </GridItem>
                   <GridItem display="flex" justifyContent="flex-end">
-                    <Button colorScheme="blue">Update</Button>
+                    <Button className="bookInfoPage__updateLogButton" onClick={onLogUpdate} colorScheme="blue">Update</Button>
                   </GridItem>
                 </Grid>
               </Box>
@@ -126,7 +166,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
             <Divider />
             <Container maxW="100%">
               <Box className="bookInfoPage__details">
-                <Heading size="md">Details Section</Heading>
+                <Heading size="md">Details</Heading>
                 <VStack>
                   <Text>Title: {book.title}</Text>
                 </VStack>
@@ -138,7 +178,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 <Heading size="md">Notes & Rating</Heading>
                 <Box display="flex" justifyContent="space-between">
                   <Box display="flex">
-                    <Heading size="sm" my={2.5} mr={1}>
+                    <Heading size="sm" my={4} mr={1}>
                       Rating:
                     </Heading>
                     <HStack>
@@ -163,10 +203,9 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                       ))}
                     </HStack>
                   </Box>
-                  <Button colorScheme="blue">Add Note</Button>
                 </Box>
                 {/* make component for notes list */}
-                <Text>{book.notes[0].content}</Text>
+                <NotesList bookNotes={book.notes}></NotesList>
               </Box>
             </Container>
           </VStack>

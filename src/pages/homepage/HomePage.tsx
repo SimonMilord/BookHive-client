@@ -11,7 +11,7 @@ import {
 import MobileNav from "src/components/MobileNav/mobileNav";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import "./HomePage.scss";
-import BookList from "src/components/BookList/booklist";
+import BookList from "src/components/BookList/bookList";
 import ReadingCard from "src/components/ReadingCard/readingCard";
 import { useEffect, useState } from "react";
 
