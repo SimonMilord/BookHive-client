@@ -43,6 +43,10 @@ const NotesList = ({ bookNotes }: NotesListProps): JSX.Element => {
   }
 
   const handleSubmitNewNote = () => {
+    if (newNote === '') {
+      alert('Please enter a note');
+      return
+    }
     const todayDate = getTodayFormatted();
     const newNoteId = getNewNoteId();
     const newSortedNotes = getSortedNotes([...notes, {id: newNoteId, content: newNote, date: todayDate}]);
