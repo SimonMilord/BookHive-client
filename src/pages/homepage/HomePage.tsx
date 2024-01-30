@@ -3,8 +3,9 @@ import {
   Box,
   Center,
   Heading,
+  List,
+  ListItem,
   Spinner,
-  VStack,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -14,10 +15,13 @@ import "./HomePage.scss";
 import BookList from "src/components/BookList/bookList";
 import ReadingCard from "src/components/ReadingCard/readingCard";
 import { useEffect, useState } from "react";
+import { Book } from "src/types/types";
 
 export default function HomePage() {
   const { onOpen, onClose } = useDisclosure();
   const [toReadBooks, setToReadBooks] = useState([]);
+  const [readingBooks, setReadingBooks] = useState([]);
+  const [finishedBooks, setFinishedBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -40,6 +44,8 @@ export default function HomePage() {
       }
       const fetchedToReadBooks = await response.json();
       setToReadBooks(fetchedToReadBooks);
+      setReadingBooks(fetchedToReadBooks); // TO CHANGE LATER WHEN ADDING STATUS IN DB
+      setFinishedBooks(fetchedToReadBooks); // TO CHANGE LATER WHEN ADDING STATUS IN DB
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -62,18 +68,22 @@ export default function HomePage() {
                 <Heading>
                   Reading
                   <Badge variant="solid" fontSize="1rem" ml={2}>
-                    1
+                    {readingBooks.length ?? 0}
                   </Badge>
                 </Heading>
-                <VStack>
-                  <ReadingCard />
-                </VStack>
+                <List>
+                  {readingBooks && readingBooks.map((book: Book, index) => (
+                    <ListItem key={index}>
+                      <ReadingCard book={book} />
+                    </ListItem>
+                  ))}
+                </List>
               </Box>
               <Box>
                 <Heading>
                   To Read
                   <Badge variant="solid" fontSize="1rem" ml={2}>
-                    {toReadBooks.length}
+                    {toReadBooks.length ?? 0}
                   </Badge>
                 </Heading>
                 {errorMessage ? <span>{errorMessage}</span> : <></>}
@@ -89,10 +99,17 @@ export default function HomePage() {
                 <Heading>
                   Finished
                   <Badge variant="solid" fontSize="1rem" ml={2}>
-                    0
+                    {finishedBooks.length ?? 0}
                   </Badge>
                 </Heading>
-                {/* <BookList /> */}
+                {errorMessage ? <span>{errorMessage}</span> : <></>}
+                {isLoading ? (
+                  <Center>
+                    <Spinner />
+                  </Center>
+                ) : (
+                  <BookList booksArray={finishedBooks}/>
+                )}
               </Box>
             </Box>
           </Box>

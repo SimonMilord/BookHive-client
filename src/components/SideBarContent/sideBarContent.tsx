@@ -14,14 +14,15 @@ interface LinkItemProps {
   name: string;
   target: string;
   icon: IconType;
+  color: string;
 }
 // to change later: destinations for links for whatever sections we want
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", target: "/", icon: FiHome },
-  { name: "Reading Stats", target: "#", icon: FiActivity },
-  { name: "Discover Books", target: "#", icon: FiCompass },
-  { name: "Custom Lists", target: "#", icon: FiList },
-  { name: "Achievements", target: "#", icon: FiAward},
+  { name: "Home", target: "/", icon: FiHome, color: 'black' },
+  { name: "Reading Stats", target: "#", icon: FiActivity, color: 'grayText' },
+  { name: "Discover Books", target: "#", icon: FiCompass, color: 'grayText' },
+  { name: "Custom Lists", target: "#", icon: FiList, color: 'grayText' },
+  { name: "Achievements", target: "#", icon: FiAward, color: 'grayText'},
 ];
 
 interface SidebarProps extends BoxProps {
@@ -53,7 +54,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps): JSX.Element => {
       >
         <Box>
           {LinkItems.map((link) => (
-            <NavItem key={link.name} icon={link.icon} target={link.target}>
+            <NavItem key={link.name} icon={link.icon} target={link.target} color={link.color}>
               {link.name}
             </NavItem>
           ))}
