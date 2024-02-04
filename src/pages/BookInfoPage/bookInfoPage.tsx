@@ -15,6 +15,8 @@ import {
   Link as ChakraLink,
   HStack,
   Icon,
+  Tag,
+  Link,
 } from "@chakra-ui/react";
 import "./bookInfoPage.scss";
 import { Link as ReactRouterLink } from "react-router-dom";
@@ -25,10 +27,24 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
 import NotesList from "src/components/NotesList/notesList";
 import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface BookInfoPageProps {
   book: Book;
 }
+
+const temporaryBook = {
+  title: 'The Lord Of The Rings',
+  author_name: 'J.R.R. Tolkien',
+  first_publish_year: 1937,
+  number_of_pages_median: 312,
+  ratings_average: 4.5,
+  ratings_count: 100,
+  isbn: ['123456789'],
+  id_amazon: ['B00J7WYXQO'],
+  edition: 'Penguin', // to change to proper accessor
+  subject: ['fantasy', 'adventure', 'dragons'],
+};
 
 // need to get the book id from the params and then fetch the specific book data
 // from server?
@@ -194,8 +210,22 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
             <Container maxW="100%">
               <Box className="bookInfoPage__details">
                 <Heading size="md">Details</Heading>
-                <VStack>
-                  <Text>Title: {book.title}</Text>
+                <VStack display='flex' alignItems='flex-start' my={3}>
+                  <Text><strong>Title: </strong>{temporaryBook.title}</Text>
+                  <Text><strong>Author: </strong>{temporaryBook.author_name}</Text>
+                  <Text><strong>Year: </strong>{temporaryBook.first_publish_year}</Text>
+                  <Text><strong>Pages: </strong>{temporaryBook.number_of_pages_median}</Text>
+                  <Text><strong>Rating: </strong>{temporaryBook.ratings_average}/5 ({temporaryBook.ratings_count} ratings)</Text>
+                  <Text><strong>Edition: </strong>{temporaryBook.edition}</Text>
+                  <Text><strong>ISBN #: </strong>{temporaryBook.isbn}</Text>
+                  <Text><strong>Find:</strong><Link href={`https://www.amazon.ca/dp/${temporaryBook.id_amazon}`} textDecoration='underline'>{`${temporaryBook.title} on Amazon`}<ExternalLinkIcon mx='2px'/></Link></Text>
+                  <Text><strong>Subjects: </strong>
+                    <HStack spacing={3} my={1}>
+                      {temporaryBook.subject.map((subject, index) => (
+                        <Tag key={index} size="md" variant='subtle' colorScheme="blue">{subject}</Tag>
+                      ))}
+                    </HStack>
+                  </Text>
                 </VStack>
               </Box>
             </Container>
@@ -206,7 +236,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 <Box display="flex" justifyContent="space-between">
                   <Box display="flex">
                     <Heading size="sm" my={4} mr={1}>
-                      Rating:
+                      My rating:
                     </Heading>
                     <HStack>
                       {[1, 2, 3, 4, 5].map((index) => (
@@ -231,7 +261,6 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     </HStack>
                   </Box>
                 </Box>
-                {/* make component for notes list */}
                 <NotesList bookNotes={book.notes}></NotesList>
               </Box>
             </Container>
