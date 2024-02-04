@@ -72,11 +72,12 @@ export default function HomePage() {
                   </Badge>
                 </Heading>
                 <List>
-                  {readingBooks && readingBooks.map((book: Book, index) => (
-                    <ListItem key={index}>
-                      <ReadingCard book={book} />
-                    </ListItem>
-                  ))}
+                  {readingBooks &&
+                    readingBooks.map((book: Book, index) => (
+                      <ListItem key={index}>
+                        <ReadingCard book={book} />
+                      </ListItem>
+                    ))}
                 </List>
               </Box>
               <Box>
@@ -92,7 +93,7 @@ export default function HomePage() {
                     <Spinner />
                   </Center>
                 ) : (
-                  <BookList booksArray={toReadBooks}/>
+                  <BookList booksArray={toReadBooks} />
                 )}
               </Box>
               <Box>
@@ -108,7 +109,7 @@ export default function HomePage() {
                     <Spinner />
                   </Center>
                 ) : (
-                  <BookList booksArray={finishedBooks}/>
+                  <BookList booksArray={finishedBooks} />
                 )}
               </Box>
             </Box>
