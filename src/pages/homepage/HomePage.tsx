@@ -9,7 +9,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import MobileNav from "src/components/MobileNav/mobileNav";
+import PageHeader from "src/components/PageHeader/pageHeader";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import "./HomePage.scss";
 import BookList from "src/components/BookList/bookList";
@@ -61,7 +61,7 @@ export default function HomePage() {
             onClose={() => onClose}
             display={{ base: "none", md: "block" }}
           />
-          <MobileNav onOpen={onOpen} />
+          <PageHeader onOpen={onOpen} />
           <Box ml={{ base: 0, md: 60 }} p="4">
             <Box>
               <Box>

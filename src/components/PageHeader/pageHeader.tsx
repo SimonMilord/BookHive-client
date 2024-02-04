@@ -9,10 +9,10 @@ import { FiMenu } from "react-icons/fi";
 import NavMenu from "../NavMenu/navMenu";
 import SearchBox from "../SearchBox/searchBox";
 
-interface MobileProps extends FlexProps {
+interface PageHeaderProps extends FlexProps {
   onOpen: () => void;
 }
-const MobileNav = ({ onOpen, ...rest }: MobileProps): JSX.Element => {
+const PageHeader = ({ onOpen, ...rest }: PageHeaderProps): JSX.Element => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -45,4 +45,4 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps): JSX.Element => {
   );
 };
 
-export default MobileNav;
+export default PageHeader;

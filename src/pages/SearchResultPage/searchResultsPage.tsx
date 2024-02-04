@@ -4,7 +4,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
-import MobileNav from "src/components/MobileNav/mobileNav";
+import PageHeader from "src/components/PageHeader/pageHeader";
 import { SearchResult } from "src/types/types";
 import SearchResultList from "src/components/SearchResultList/searchResultList";
 
@@ -24,7 +24,7 @@ const SearchResultsPage = ({results, query}: SearchResultsProps) => {
             onClose={() => onClose}
             display={{ base: "none", md: "block" }}
           />
-          <MobileNav onOpen={onOpen} />
+          <PageHeader onOpen={onOpen} />
           <Box ml={{ base: 0, md: 60 }} p="4">
             <SearchResultList results={results} query={query}/>
           </Box>

@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import "./bookInfoPage.scss";
 import { Link as ReactRouterLink } from "react-router-dom";
-import MobileNav from "src/components/MobileNav/mobileNav";
+import PageHeader from "src/components/PageHeader/pageHeader";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
 import { FaStar, FaRegStar } from "react-icons/fa";
@@ -108,7 +108,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
           onClose={() => onClose}
           display={{ base: "none", md: "block" }}
         />
-        <MobileNav onOpen={onOpen} />
+        <PageHeader onOpen={onOpen} />
         <Box ml={{ base: 0, md: 60 }} p="4">
           <VStack>
             <Container maxW="100%">
