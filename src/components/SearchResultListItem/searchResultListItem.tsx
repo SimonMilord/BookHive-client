@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchResult } from "src/types/types";
 import { FiPlus } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface SearchResultListItemProps {
   result: SearchResult;
@@ -24,6 +24,10 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
     // TO DO
     console.log("Book added: " + result.title);
   };
+
+  useEffect(() => {
+    console.log("result item: " + JSON.stringify(result));
+  }, []);
 
   return (
     <Card
@@ -42,23 +46,33 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       <Box display="flex" justifyContent="space-between" w="100%">
         <Stack spacing={1}>
           <CardBody>
-            <Text>
-              <strong>Title:</strong> {result.title}
-            </Text>
-            <Text>
-              <strong>Author:</strong> {result.author}
-            </Text>
-            <Text>
-              <strong>Year:</strong> {result.year}
-            </Text>
-            <Text>
-              <strong>Pages:</strong> {result.pages}
-            </Text>
+            {result.title ? (
+              <Text>
+                <strong>Title:</strong> {result.title}
+              </Text>
+            ) : null}
+            {result.author_name ? (
+              <Text>
+                <strong>Author:</strong> {result.author_name}
+              </Text>
+            ) : null}
+            {result.first_publish_year ?? (
+              <Text>
+                <strong>Year:</strong> {result.first_publish_year}
+              </Text>
+            )}
+            {result.number_of_pages_median ? (
+              <Text>
+                <strong>Pages:</strong> {result.number_of_pages_median}
+              </Text>
+            ): null}
             <Divider my="0.5rem" />
             <Box>
-              <Text noOfLines={4} fontSize="sm" as="cite">
-                {result.excerpt}
-              </Text>
+              {result.excerpt ? (
+                <Text noOfLines={4} fontSize="sm" as="cite">
+                  {result.excerpt}
+                </Text>
+              ) : null}
             </Box>
           </CardBody>
         </Stack>

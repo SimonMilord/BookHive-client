@@ -8,37 +8,8 @@ import LoginPage from "./pages/Login/Login";
 import BookInfoPage from "./pages/BookInfoPage/bookInfoPage";
 import SearchResultsPage from "./pages/SearchResultPage/searchResultsPage";
 import { Book, SearchResult } from "./types/types";
-
-
-const mockSearchResults: SearchResult[] = [
-  {
-    // image: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg',
-    image: 'https://covers.openlibrary.org/b/isbn/0261102214-M.jpg',
-    title: 'The Hobbit',
-    author: 'J.R.R. Tolkien',
-    pages: 250,
-    year: 1954,
-    excerpt: 'Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely travelling further than the pantry of his hobbit-hole in Bag End. But his contentment is disturbed when the wizard, Gandalf, and a company of thirteen dwarves arrive on his doorstep one day to whisk him away on an unexpected journey ‘there and back again’. They have a plot to raid the treasure hoard of Smaug the Magnificent, a large and very dangerous dragon…',
-  },
-  {
-    image: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg',
-    title: 'MoneyBall',
-    author: 'Michael Lewis',
-    pages: 350,
-    year: 2003,
-    excerpt: 'Moneyball is a quest for the secret of success in baseball. Following the low-budget Oakland Athletics, their larger-than-life general manger, Billy Beane, and the strange brotherhood of amateur baseball enthusiasts, Michael Lewis has written not only "the single most influential baseball book ever" (Rob Neyer, Slate) but also what "may be the best book ever written on business"',
-  },
-  {
-    image: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg',
-    title: 'The Lord Of The Rings',
-    author: 'J.R.R. Tolkien',
-    pages: 990,
-    year: 1955,
-    excerpt: 'Sauron, the Dark Lord, has gathered to him all the Rings of Power – the means by which he intends to rule Middle-earth. All he lacks in his plans for dominion is the One Ring – the ring that rules them all – which has fallen into the hands of the hobbit, Bilbo Baggins.',
-  }
-];
-
-const mockQuery = 'J.R.R. Tolkien';
+import { useState } from "react";
+import SearchContext from "./context/SearchContext";
 
 const mockBookData: Book = {
   id: '1',
@@ -61,12 +32,13 @@ const mockBookData: Book = {
     {id: '3', date: '2024-01-03', content: 'They did Faramir dirty.'}
   ],
 }
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<HomePage />} />
       {/* to change later */}
-      <Route path="searchresults" element={<SearchResultsPage results={mockSearchResults} query={mockQuery}/>} />
+      <Route path="searchresults" element={<SearchResultsPage />} />
       <Route path="bookinfo/:id" element={<BookInfoPage book={mockBookData}/>} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />
@@ -75,7 +47,12 @@ const router = createBrowserRouter(
 )
 
 export default function App() {
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
   return (
-    <RouterProvider router={router}/>
+    <SearchContext.Provider value={{searchResults, setSearchResults, searchTerm, setSearchTerm}}>
+      <RouterProvider router={router}/>
+    </SearchContext.Provider>
   );
 }

@@ -5,15 +5,9 @@ import {
 } from "@chakra-ui/react";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import PageHeader from "src/components/PageHeader/pageHeader";
-import { SearchResult } from "src/types/types";
 import SearchResultList from "src/components/SearchResultList/searchResultList";
 
-interface SearchResultsProps {
-  results: SearchResult[];
-  query: string;
-}
-
-const SearchResultsPage = ({results, query}: SearchResultsProps) => {
+const SearchResultsPage: React.FC = () => {
   const { onOpen, onClose } = useDisclosure();
 
   return (
@@ -26,7 +20,7 @@ const SearchResultsPage = ({results, query}: SearchResultsProps) => {
           />
           <PageHeader onOpen={onOpen} />
           <Box ml={{ base: 0, md: 60 }} p="4">
-            <SearchResultList results={results} query={query}/>
+            <SearchResultList />
           </Box>
         </Box>
       </div>

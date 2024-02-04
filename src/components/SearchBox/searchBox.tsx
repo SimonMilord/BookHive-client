@@ -1,5 +1,5 @@
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -9,12 +9,15 @@ import {
   InputRightElement,
   Spinner,
 } from "@chakra-ui/react";
-
+import SearchContext from "src/context/SearchContext";
+import { useNavigate } from "react-router-dom";
 const SearchBox: React.FC<{}> = () => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [searchresults, setSearchResults] = useState<any[]>([]);
+
+  const { setSearchResults, setSearchTerm } = useContext(SearchContext);
+  const navigate = useNavigate();
 
   // Function to handle the search query change
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,15 +26,17 @@ const SearchBox: React.FC<{}> = () => {
   };
 
   // Function to handle the submit / trigger search
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (query.length === 0) {
       return;
     }
-    triggerSearch(query);
-    handleClearInput();
+    await triggerSearch(query);
+    navigate("/searchresults");
   };
 
   const triggerSearch = async (query: string) => {
+    handleClearInput();
+    setSearchTerm(query);
     setIsLoading(true);
     try {
       const response = await fetch(
