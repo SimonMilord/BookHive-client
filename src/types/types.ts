@@ -24,19 +24,14 @@ export type Book = {
  * Type of the results displayed in the SearchResultList after being searched
  */
 export type SearchResult = {
-  // image: string | undefined, // ?
-  // title: string,
-  // author: string,
-  // pages: number,
-  // year: string | number,
-  // excerpt: string,
+  key: string,
   title: string,
-  author_name: string,
+  author_name: string | string[],
   first_publish_year: number,
   isbn: number[],
   ratings_average: number,
   ratings_count: number,
-  image: string,
+  cover_i: string,
   number_of_pages_median: number,
   excerpt: string,
 }

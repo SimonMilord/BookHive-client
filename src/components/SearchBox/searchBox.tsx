@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import SearchContext from "src/context/SearchContext";
 import { useNavigate } from "react-router-dom";
+import { SearchResult } from "src/types/types";
 const SearchBox: React.FC<{}> = () => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,9 +53,11 @@ const SearchBox: React.FC<{}> = () => {
         );
       }
       const data = await response.json();
-      const searchResults = data.docs ?? data.docs;
-      setSearchResults(searchResults);
-      console.log("Search results: ", searchResults); // to remove later
+      const rawSearchResults = data.docs ?? data.docs;
+      // Parses the raw search results to filter out the ones without a cover_i
+      const parsedSearchResults = rawSearchResults.filter((result: SearchResult) => result.cover_i !== undefined);
+      setSearchResults(parsedSearchResults);
+      console.log("Search results: ", parsedSearchResults); // to remove later
     } catch (error) {
       console.error(error);
     }
