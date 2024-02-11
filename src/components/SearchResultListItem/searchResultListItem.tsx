@@ -62,7 +62,9 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
             ) : null}
             {result.author_name ? (
               <Text>
-                <strong>Author:</strong> {result.author_name}
+                <strong>Author:</strong>{" "}
+                {result.author_name &&
+                  result.author_name.map((author: string) => author).join(", ")}
               </Text>
             ) : null}
             {result.first_publish_year ? (
@@ -83,12 +85,13 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
                 </Text>
               ) : null}
             </Box>
-            <Stack direction='row' wrap='wrap' mt={2}>
-              {result.subject && result.subject.slice(0,5).map((subject: string, index) => (
-                <Badge key={index} colorScheme="blue" variant='subtle'>
-                  {subject}
-                </Badge>
-              ))}
+            <Stack direction="row" wrap="wrap" mt={2}>
+              {result.subject &&
+                result.subject.slice(0, 5).map((subject: string, index) => (
+                  <Badge key={index} colorScheme="blue" variant="subtle">
+                    {subject}
+                  </Badge>
+                ))}
             </Stack>
           </CardBody>
         </Stack>

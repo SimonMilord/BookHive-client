@@ -26,7 +26,7 @@ export type Book = {
 export type SearchResult = {
   key: string,
   title: string,
-  author_name: string | string[],
+  author_name: string[],
   first_publish_year: number,
   isbn: number[],
   ratings_average: number,
