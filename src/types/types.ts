@@ -33,7 +33,9 @@ export type SearchResult = {
   ratings_count: number,
   cover_i: string,
   number_of_pages_median: number,
-  excerpt: string,
+  excerpt: string, // ???
+  first_sentence: string,
+  subject: string[],
 }
 
 /**

@@ -7,10 +7,11 @@ import {
   Stack,
   Button,
   Divider,
+  Badge,
 } from "@chakra-ui/react";
 import { SearchResult } from "src/types/types";
 import { FiPlus } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 const imagePlaceholder =
   "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg";
 
@@ -26,10 +27,6 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
     // TO DO
     console.log("Book added: " + result.title);
   };
-
-  useEffect(() => {
-    console.log("author: " + JSON.stringify(result.author_name));
-  }, []);
 
   return (
     <Card
@@ -80,12 +77,19 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
             ) : null}
             <Divider my="0.5rem" />
             <Box>
-              {result.excerpt ? (
-                <Text noOfLines={4} fontSize="sm" as="cite">
-                  {result.excerpt}
+              {result.first_sentence ? (
+                <Text noOfLines={3} fontSize="sm" as="cite">
+                  {result.first_sentence}
                 </Text>
               ) : null}
             </Box>
+            <Stack direction='row' wrap='wrap' mt={2}>
+              {result.subject && result.subject.slice(0,5).map((subject: string, index) => (
+                <Badge key={index} colorScheme="blue" variant='subtle'>
+                  {subject}
+                </Badge>
+              ))}
+            </Stack>
           </CardBody>
         </Stack>
         <Box display="flex" alignItems="center" p="20px">
