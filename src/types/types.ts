@@ -15,7 +15,8 @@ export type Book = {
   datePublished: string,
   startDate: string | null,
   finishedDate: string | null,
-  excerpt: string,
+  excerpt?: string,
+  first_sentence: string,
   rating: number | null,
   notes: Note[],
 }
@@ -33,7 +34,6 @@ export type SearchResult = {
   ratings_count: number,
   cover_i: string,
   number_of_pages_median: number,
-  excerpt: string, // ???
   first_sentence: string,
   subject: string[],
 }

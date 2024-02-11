@@ -158,7 +158,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                   </GridItem>
                   <GridItem colSpan={4}>
                     <Text noOfLines={4} as="cite">
-                      {book.excerpt}
+                      {book.first_sentence}
                     </Text>
                   </GridItem>
                 </Grid>
