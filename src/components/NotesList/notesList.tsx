@@ -90,8 +90,8 @@ const NotesList = ({ bookNotes }: NotesListProps): JSX.Element => {
                   flexDirection={"row"}
                   justifyContent={"space-between"}
                 >
-                  <Text as="cite">{note.content}</Text>
-                  <Box display="flex" flexDirection="column" justifyContent="flex-end">
+                  <Text as="cite" maxWidth="80%">{note.content}</Text>
+                  <Box display="flex" flexDirection="column" justifyContent="flex-start" maxWidth="20%">
                     <Text>{note.date}</Text>
                     <Button colorScheme="blue" variant="ghost" onClick={() => handleDeleteNote(note.id)}>
                       <FaRegTrashAlt />
