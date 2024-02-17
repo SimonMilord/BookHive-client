@@ -6,7 +6,7 @@ export type Book = {
   title: string,
   author: string,
   image: string, // ?
-  status: string, // To Read, Started, Finished + maybe change that to enum?
+  status: BookStatus,
   isbn: string,
   pageCount: number,
   language: string,
@@ -21,6 +21,11 @@ export type Book = {
   notes: Note[],
 }
 
+enum BookStatus {
+  TO_READ = 'To Read',
+  STARTED = 'Started',
+  FINISHED = 'Finished',
+}
 /**
  * Type of the results displayed in the SearchResultList after being searched
  */
