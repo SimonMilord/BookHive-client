@@ -5,7 +5,7 @@ export type Book = {
   id: string | number,
   title: string,
   author: string,
-  image: string, // ?
+  coverId: string,
   status: BookStatus,
   isbn: string,
   pageCount: number,
@@ -16,16 +16,26 @@ export type Book = {
   startDate: string | null,
   finishedDate: string | null,
   excerpt?: string,
-  first_sentence: string,
-  rating: number | null,
+  firstSentence: string,
+  rating: number,
   notes: Note[],
 }
 
-enum BookStatus {
+export enum BookStatus {
   TO_READ = 'To Read',
   STARTED = 'Started',
   FINISHED = 'Finished',
 }
+
+/**
+ * Type of the notes that can be added on a specific book
+ */
+export type Note = {
+  id: string,
+  date: string,
+  content: string,
+}
+
 /**
  * Type of the results displayed in the SearchResultList after being searched
  */
@@ -43,11 +53,3 @@ export type SearchResult = {
   subject: string[],
 }
 
-/**
- * Type of the notes that can be added on a specific book
- */
-export type Note = {
-  id: string,
-  date: string,
-  content: string,
-}

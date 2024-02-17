@@ -120,7 +120,8 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 >
                   <GridItem rowSpan={2} colSpan={1}>
                     <Image
-                      src={book.image}
+                      src={
+                        `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
                       fit="contain"
                       minH={200}
                       maxH={250}
@@ -158,7 +159,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                   </GridItem>
                   <GridItem colSpan={4}>
                     <Text noOfLines={4} as="cite">
-                      {book.first_sentence}
+                      {book.firstSentence}
                     </Text>
                   </GridItem>
                 </Grid>
