@@ -40,16 +40,18 @@ export type Note = {
  * Type of the results displayed in the SearchResultList after being searched
  */
 export type SearchResult = {
-  key: string,
+  id: string,
   title: string,
   author_name: string[],
+  cover_i: string,
+  isbn: string[],
+  number_of_pages_median: number,
+  language: string[],
+  subject: string[],
+  publisher: string[],
   first_publish_year: number,
-  isbn: number[],
+  first_sentence: string,
   ratings_average: number,
   ratings_count: number,
-  cover_i: string,
-  number_of_pages_median: number,
-  first_sentence: string,
-  subject: string[],
 }
 

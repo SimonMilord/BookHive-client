@@ -30,6 +30,7 @@ export default function HomePage() {
   }, []);
 
   // Should modify this method to filter the books are are being read to add them to the reading list instead.
+  // Or maybe parse the status on the server side and return the books in the right list
   const getToReadBooks = async () => {
     setIsLoading(true);
     try {
@@ -46,13 +47,13 @@ export default function HomePage() {
       setToReadBooks(fetchedToReadBooks);
       setReadingBooks(fetchedToReadBooks); // TO CHANGE LATER WHEN ADDING STATUS IN DB
       setFinishedBooks(fetchedToReadBooks); // TO CHANGE LATER WHEN ADDING STATUS IN DB
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
       setErrorMessage("Unable to fetch books to read from the server.");
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
+
   return (
     <div className="homepage">
       <div className="content">

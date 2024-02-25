@@ -8,12 +8,13 @@ import {
   Button,
   Divider,
   Badge,
+  useToast,
 } from "@chakra-ui/react";
 import { SearchResult } from "src/types/types";
 import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
 const imagePlaceholder =
-  "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg";
+  "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg"; // to replace later for proper placeholder
 
 export interface SearchResultListItemProps {
   result: SearchResult;
@@ -21,11 +22,72 @@ export interface SearchResultListItemProps {
 
 const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
   const [isAddActionLoading, setIsAddActionLoading] = useState(false);
+  const toast = useToast();
 
   // Function to handle adding a book from the search results list to the to read list
-  const handleAddBookToReadList = (result: SearchResult) => {
-    // TO DO
-    console.log("Book added: " + result.title);
+  const handleAddBookToReadList = async (result: SearchResult) => {
+    setIsAddActionLoading(true);
+    const isAlreadyInLibrary = await checkIfBookIsInLibrary(result);
+
+    if (!isAlreadyInLibrary) {
+      try {
+        // Will need to refactor this to use the server once deployed
+        const response = await fetch("http://localhost:8000/books/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(result),
+        });
+
+        if (!response.ok) {
+          throw new Error("Unable to add book to the to read list.");
+        };
+
+        toast({
+          title: `${result.title} added to your library.`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast({
+        title: `${result.title} is already in your library.`,
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+    setIsAddActionLoading(false);
+  };
+
+  // Function to check if a search result is already in the to read list
+  const checkIfBookIsInLibrary = async (result: SearchResult) => {
+    const newBookIsbnCode = result.isbn[0];
+    const currentLibraryIsbnCodes: string[] = await fetchCurrentIsbnCodes();
+    const isAlreadyInLibrary = currentLibraryIsbnCodes.includes(newBookIsbnCode) ? true : false;
+    return isAlreadyInLibrary;
+  };
+
+  // Function to fetch all the ISBNs of the books in the library
+  const fetchCurrentIsbnCodes = async (): Promise<string[]> => {
+    try {
+      const response = await fetch("http://localhost:8000/books/isbns", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to fetch ISBNs from the library.");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
   };
 
   return (
@@ -97,6 +159,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
         </Stack>
         <Box display="flex" alignItems="center" p="20px">
           <Button
+            className="searchResultListItem__addButton"
             isLoading={isAddActionLoading}
             loadingText="Adding"
             leftIcon={<FiPlus />}
