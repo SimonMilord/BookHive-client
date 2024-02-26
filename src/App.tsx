@@ -27,9 +27,9 @@ const mockBookData: Book = {
   finishedDate: null,
   firstSentence: 'Since it was first published in 1954, The Lord of the Rings has been a book people have treasured. Steeped in unrivalled magic and otherworldliness, its sweeping fantasy and epic adventure has touched the hearts of young and old alike. Over 150 million copies of its many editions have been sold around the world, and occasional collectors’ editions become prized and valuable items of publishing.',
   rating: 5,
-  notes: [{id: '1', date: '2024-01-01', content: 'I really enjoyed the book.'},
-    {id: '2', date: '2024-01-02', content: 'I can really relate to Frodo.'},
-    {id: '3', date: '2024-01-03', content: 'They did Faramir dirty.'}
+  notes: [{id: '1', date: '2024-01-01', content: 'I really enjoyed the book.', book_id: '1'},
+    {id: '2', date: '2024-01-02', content: 'I can really relate to Frodo.', book_id: '2'},
+    {id: '3', date: '2024-01-03', content: 'They did Faramir dirty.', book_id: '3'}
   ],
 }
 

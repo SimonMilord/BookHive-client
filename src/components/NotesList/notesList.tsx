@@ -14,9 +14,10 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 interface NotesListProps {
   bookNotes: Note[];
+  bookId: string;
 }
 
-const NotesList = ({ bookNotes }: NotesListProps): JSX.Element => {
+const NotesList = ({ bookNotes, bookId }: NotesListProps): JSX.Element => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<string>("");
   const [textareaHeight, setTextareaHeight] = useState<number>(0);
@@ -68,7 +69,7 @@ const NotesList = ({ bookNotes }: NotesListProps): JSX.Element => {
     const newNoteId = getNewNoteId();
     const newSortedNotes = getSortedNotes([
       ...notes,
-      { id: newNoteId, content: newNote, date: todayDate },
+      { id: newNoteId, content: newNote, date: todayDate, book_id: bookId},
     ]);
     setNotes(newSortedNotes);
     setTextareaHeight(0);

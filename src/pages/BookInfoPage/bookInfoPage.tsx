@@ -19,7 +19,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import "./bookInfoPage.scss";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import PageHeader from "src/components/PageHeader/pageHeader";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
@@ -27,23 +27,24 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
 import NotesList from "src/components/NotesList/notesList";
 import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
+import { IoArrowBack } from "react-icons/io5";
 
 interface BookInfoPageProps {
   book: Book;
 }
 
 const temporaryBook = {
-  title: 'The Lord Of The Rings',
-  author_name: 'J.R.R. Tolkien',
+  title: "The Lord Of The Rings",
+  author_name: "J.R.R. Tolkien",
   first_publish_year: 1937,
   number_of_pages_median: 312,
   ratings_average: 4.5,
   ratings_count: 100,
-  isbn: ['123456789'],
-  id_amazon: ['B00J7WYXQO'],
-  edition: 'Penguin', // to change to proper accessor
-  subject: ['fantasy', 'adventure', 'dragons'],
+  isbn: ["123456789"],
+  id_amazon: ["B00J7WYXQO"],
+  edition: "Penguin", // to change to proper accessor
+  subject: ["fantasy", "adventure", "dragons"],
 };
 
 // need to get the book id from the params and then fetch the specific book data
@@ -57,6 +58,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
   const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState<string>("Start");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const navigate = useNavigate();
 
   const onStatusBtnClick = () => {
     switch (bookStatus) {
@@ -72,6 +74,32 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
         setBookStatus("To Read");
         setBookStatusBtnLabel("Start");
         break;
+    }
+  };
+
+  // Given a book id, delete it from the database
+  const onDeleteBtnClick = async (id: string, title: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/books/${id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+      });
+      if (!response.ok) {
+        throw new Error("Unable to delete book from the library.");
+      }
+
+      toast({
+        title: `${title} successfully removed from your library.`,
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/");
+    } catch (error) {
+      console.log('error deleting book: ', error);
+      console.error("Error deleting book: " + book.title, error);
     }
   };
 
@@ -99,7 +127,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
   const handleLogUpdate = (value: number) => {
     setCurrentPage(value);
     setIsModalOpen(false);
-  }
+  };
 
   return (
     <div className="bookInfoPage">
@@ -112,6 +140,40 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
         <Box ml={{ base: 0, md: 60 }} p="4">
           <VStack>
             <Container maxW="100%">
+              <Box
+                className="bookInfoPage__buttonSection"
+                display="flex"
+                justifyContent="space-between"
+                mb={3}
+              >
+                <ChakraLink
+                  className="bookInfoPage__backButton"
+                  as={ReactRouterLink}
+                  to="/"
+                  colorScheme="blue"
+                >
+                  <IoArrowBack />
+                </ChakraLink>
+                <Box>
+                  <ButtonGroup gap="2">
+                    <Button
+                      colorScheme="blue"
+                      className="bookInfoPage__changeStatusButton"
+                      onClick={onStatusBtnClick}
+                    >
+                      {bookStatusBtnLabel}
+                    </Button>
+                    <Button
+                      colorScheme="blue"
+                      className="bookInfoPage__deleteBookButton"
+                      onClick={() => onDeleteBtnClick(book.id, book.title)}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </ButtonGroup>
+                </Box>
+              </Box>
+
               <Box className="bookInfoPage__topSection">
                 <Grid
                   templateRows="repeat(2, 1fr)"
@@ -120,8 +182,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 >
                   <GridItem rowSpan={2} colSpan={1}>
                     <Image
-                      src={
-                        `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
+                      src={`https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
                       fit="contain"
                       minH={200}
                       maxH={250}
@@ -129,33 +190,10 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                       borderRadius="8px"
                     />
                   </GridItem>
-                  <GridItem colSpan={2}>
+                  <GridItem colSpan={1}>
                     <Text>Title: {book.title}</Text>
                     <Text>Author: {book.author}</Text>
                     <Text>Pages: {book.pageCount}</Text>
-                  </GridItem>
-                  <GridItem
-                    colSpan={2}
-                    display="flex"
-                    justifyContent="flex-end"
-                  >
-                    <ButtonGroup gap="2">
-                      <Button
-                        colorScheme="blue"
-                        className="bookInfoPage__changeStatusButton"
-                        onClick={onStatusBtnClick}
-                      >
-                        {bookStatusBtnLabel}
-                      </Button>
-                      <ChakraLink
-                        className="bookInfoPage__backButton"
-                        as={ReactRouterLink}
-                        to="/"
-                        colorScheme="blue"
-                      >
-                        Back
-                      </ChakraLink>
-                    </ButtonGroup>
                   </GridItem>
                   <GridItem colSpan={4}>
                     <Text noOfLines={4} as="cite">
@@ -202,7 +240,12 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     >
                       Update
                     </Button>
-                    <UpdateLogModal isOpen={isModalOpen} onClose={handleCloseModal} onLogUpdate={handleLogUpdate} currentPage={currentPage}/>
+                    <UpdateLogModal
+                      isOpen={isModalOpen}
+                      onClose={handleCloseModal}
+                      onLogUpdate={handleLogUpdate}
+                      currentPage={currentPage}
+                    />
                   </GridItem>
                 </Grid>
               </Box>
@@ -211,19 +254,58 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
             <Container maxW="100%">
               <Box className="bookInfoPage__details">
                 <Heading size="md">Details</Heading>
-                <VStack display='flex' alignItems='flex-start' my={3}>
-                  <Text><strong>Title: </strong>{temporaryBook.title}</Text>
-                  <Text><strong>Author: </strong>{temporaryBook.author_name}</Text>
-                  <Text><strong>Year: </strong>{temporaryBook.first_publish_year}</Text>
-                  <Text><strong>Pages: </strong>{temporaryBook.number_of_pages_median}</Text>
-                  <Text><strong>Rating: </strong>{temporaryBook.ratings_average}/5 ({temporaryBook.ratings_count} ratings)</Text>
-                  <Text><strong>Edition: </strong>{temporaryBook.edition}</Text>
-                  <Text><strong>ISBN #: </strong>{temporaryBook.isbn}</Text>
-                  <Text><strong>Find:</strong><Link href={`https://www.amazon.ca/dp/${temporaryBook.id_amazon}`} textDecoration='underline'>{`${temporaryBook.title} on Amazon`}<ExternalLinkIcon mx='2px'/></Link></Text>
-                  <Text><strong>Subjects: </strong>
+                <VStack display="flex" alignItems="flex-start" my={3}>
+                  <Text>
+                    <strong>Title: </strong>
+                    {temporaryBook.title}
+                  </Text>
+                  <Text>
+                    <strong>Author: </strong>
+                    {temporaryBook.author_name}
+                  </Text>
+                  <Text>
+                    <strong>Year: </strong>
+                    {temporaryBook.first_publish_year}
+                  </Text>
+                  <Text>
+                    <strong>Pages: </strong>
+                    {temporaryBook.number_of_pages_median}
+                  </Text>
+                  <Text>
+                    <strong>Rating: </strong>
+                    {temporaryBook.ratings_average}/5 (
+                    {temporaryBook.ratings_count} ratings)
+                  </Text>
+                  <Text>
+                    <strong>Edition: </strong>
+                    {temporaryBook.edition}
+                  </Text>
+                  <Text>
+                    <strong>ISBN #: </strong>
+                    {temporaryBook.isbn}
+                  </Text>
+                  <Text>
+                    <strong>Find:</strong>
+                    <Link
+                      href={`https://www.amazon.ca/dp/${temporaryBook.id_amazon}`}
+                      textDecoration="underline"
+                    >
+                      {`${temporaryBook.title} on Amazon`}
+                      <ExternalLinkIcon mx="2px" />
+                    </Link>
+                  </Text>
+                  <Text>
+                    <strong>Subjects: </strong>
                     <HStack spacing={3} my={1}>
                       {temporaryBook.subject.map((subject, index) => (
-                        <Tag key={index} size="md" variant='subtle' colorScheme="blue">{subject}</Tag>
+                        <Tag
+                          key={index}
+                          size="md"
+                          variant="subtle"
+                          colorScheme="blue"
+                        >
+                          {subject}
+                        </Tag>
                       ))}
                     </HStack>
                   </Text>
@@ -262,7 +344,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     </HStack>
                   </Box>
                 </Box>
-                <NotesList bookNotes={book.notes}></NotesList>
+                <NotesList bookNotes={book.notes} bookId={book.id}></NotesList>
               </Box>
             </Container>
           </VStack>
@@ -273,3 +355,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
 };
 
 export default BookInfoPage;
+function toast(arg0: { title: string; status: string; duration: number; isClosable: boolean; }) {
+  throw new Error("Function not implemented.");
+}
+

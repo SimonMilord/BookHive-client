@@ -2,7 +2,7 @@
  * Type of the individual book. This is used in the bookInfoPage
  */
 export type Book = {
-  id: string | number,
+  id: string,
   title: string,
   author: string,
   coverId: string,
@@ -34,6 +34,7 @@ export type Note = {
   id: string,
   date: string,
   content: string,
+  book_id: string,
 }
 
 /**
