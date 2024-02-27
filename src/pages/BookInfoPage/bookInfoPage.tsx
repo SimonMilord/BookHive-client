@@ -19,38 +19,18 @@ import {
   Link,
 } from "@chakra-ui/react";
 import "./bookInfoPage.scss";
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { Link as ReactRouterLink, useNavigate, useParams } from "react-router-dom";
 import PageHeader from "src/components/PageHeader/pageHeader";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotesList from "src/components/NotesList/notesList";
 import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
 import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
 
-interface BookInfoPageProps {
-  book: Book;
-}
-
-const temporaryBook = {
-  title: "The Lord Of The Rings",
-  author_name: "J.R.R. Tolkien",
-  first_publish_year: 1937,
-  number_of_pages_median: 312,
-  ratings_average: 4.5,
-  ratings_count: 100,
-  isbn: ["123456789"],
-  id_amazon: ["B00J7WYXQO"],
-  edition: "Penguin", // to change to proper accessor
-  subject: ["fantasy", "adventure", "dragons"],
-};
-
-// need to get the book id from the params and then fetch the specific book data
-// from server?
-// check how to pass data from bookListItem to another page in react router
-const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
+const BookInfoPage = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   // Possible values: To Read | Reading | Finished
@@ -58,7 +38,13 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
   const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState<string>("Start");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [bookData, setBookData] = useState<Book>();
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchBookData();
+  }, []);
 
   const onStatusBtnClick = () => {
     switch (bookStatus) {
@@ -77,8 +63,27 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
     }
   };
 
+  // Fetch the book data from the server given the id
+  const fetchBookData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/books/${id}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error("Unable to fetch book with id: " + id + " data from the server.");
+      }
+      const bookDataResponse = await response.json();
+      await setBookData(bookDataResponse);
+      console.log("Book data: ", bookDataResponse);
+    } catch (error) {
+      console.error("Error fetching book data: " + error);
+    }
+  };
+
   // Given a book id, delete it from the database
-  const onDeleteBtnClick = async (id: string, title: string) => {
+  const onDeleteBtnClick = async (title: string) => {
     try {
       const response = await fetch(`http://localhost:8000/books/${id}`,
       {
@@ -99,14 +104,15 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
       navigate("/");
     } catch (error) {
       console.log('error deleting book: ', error);
-      console.error("Error deleting book: " + book.title, error);
+      console.error("Error deleting book: " + error);
     }
   };
 
-  const getBookReadingDuration = (book: Book) => {
+  // TO FIX LATER
+  const getBookReadingDuration = (book?: Book) => {
     const today: Date = new Date();
     // where startDate is a string : '2024-01-01' book.startDate
-    const startedDay: Date = new Date("2024-01-01");
+    const startedDay: Date = new Date(book?.startDate ?? today.toISOString());
     const timeDifference: number = today.getTime() - startedDay.getTime();
     const daysDifference: number = Math.floor(
       timeDifference / (1000 * 60 * 60 * 24)
@@ -114,7 +120,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
     return daysDifference > 0 ? daysDifference : 0;
   };
 
-  const readingLogDuration = getBookReadingDuration(book);
+  const readingLogDuration = getBookReadingDuration(bookData);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -128,6 +134,8 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
     setCurrentPage(value);
     setIsModalOpen(false);
   };
+
+  const genre = bookData?.genre?.split(', ');
 
   return (
     <div className="bookInfoPage">
@@ -166,7 +174,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     <Button
                       colorScheme="blue"
                       className="bookInfoPage__deleteBookButton"
-                      onClick={() => onDeleteBtnClick(book.id, book.title)}
+                      onClick={() => onDeleteBtnClick(bookData?.title || '')}
                     >
                       <DeleteIcon />
                     </Button>
@@ -182,7 +190,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 >
                   <GridItem rowSpan={2} colSpan={1}>
                     <Image
-                      src={`https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
+                      src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
                       fit="contain"
                       minH={200}
                       maxH={250}
@@ -191,13 +199,13 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     />
                   </GridItem>
                   <GridItem colSpan={1}>
-                    <Text>Title: {book.title}</Text>
-                    <Text>Author: {book.author}</Text>
-                    <Text>Pages: {book.pageCount}</Text>
+                    <Text>Title: {bookData?.title}</Text>
+                    <Text>Author: {bookData?.author}</Text>
+                    <Text>Pages: {bookData?.pageCount}</Text>
                   </GridItem>
                   <GridItem colSpan={4}>
                     <Text noOfLines={4} as="cite">
-                      {book.firstSentence}
+                      {bookData?.firstSentence}
                     </Text>
                   </GridItem>
                 </Grid>
@@ -216,7 +224,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     <Heading size="sm">
                       {bookStatus === "Finished" ? "Finished" : "Started"}
                     </Heading>
-                    <Text>{book.startDate ?? "Not started yet"}</Text>
+                    <Text>{bookData?.startDate ?? "Not started yet"}</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Read time</Heading>
@@ -229,7 +237,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                   <GridItem>
                     <Heading size="sm">Progress</Heading>
                     <Text>
-                      {((currentPage / book.pageCount) * 100).toFixed(2)}%
+                      {((currentPage / (bookData?.pageCount ?? 0)) * 100).toFixed(2)}%
                     </Text>
                   </GridItem>
                   <GridItem display="flex" justifyContent="flex-end">
@@ -257,47 +265,47 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                 <VStack display="flex" alignItems="flex-start" my={3}>
                   <Text>
                     <strong>Title: </strong>
-                    {temporaryBook.title}
+                    {bookData?.title}
                   </Text>
                   <Text>
                     <strong>Author: </strong>
-                    {temporaryBook.author_name}
+                    {bookData?.author}
                   </Text>
                   <Text>
                     <strong>Year: </strong>
-                    {temporaryBook.first_publish_year}
+                    {bookData?.yearPublished}
                   </Text>
                   <Text>
                     <strong>Pages: </strong>
-                    {temporaryBook.number_of_pages_median}
+                    {bookData?.pageCount}
                   </Text>
                   <Text>
                     <strong>Rating: </strong>
-                    {temporaryBook.ratings_average}/5 (
-                    {temporaryBook.ratings_count} ratings)
+                    {bookData?.rating}/5 (
+                    {bookData?.ratingsCount} ratings)
                   </Text>
                   <Text>
-                    <strong>Edition: </strong>
-                    {temporaryBook.edition}
+                    <strong>Publisher: </strong>
+                    {bookData?.publisher}
                   </Text>
                   <Text>
                     <strong>ISBN #: </strong>
-                    {temporaryBook.isbn}
+                    {bookData?.isbn}
                   </Text>
                   <Text>
                     <strong>Find:</strong>
                     <Link
-                      href={`https://www.amazon.ca/dp/${temporaryBook.id_amazon}`}
+                      href={`https://www.amazon.ca/dp/${bookData?.id}`}
                       textDecoration="underline"
                     >
-                      {`${temporaryBook.title} on Amazon`}
+                      {`${bookData?.title} on Amazon`}
                       <ExternalLinkIcon mx="2px" />
                     </Link>
                   </Text>
                   <Text>
                     <strong>Subjects: </strong>
                     <HStack spacing={3} my={1}>
-                      {temporaryBook.subject.map((subject, index) => (
+                      {genre?.map((subject, index) => (
                         <Tag
                           key={index}
                           size="md"
@@ -344,7 +352,7 @@ const BookInfoPage = ({ book }: BookInfoPageProps): JSX.Element => {
                     </HStack>
                   </Box>
                 </Box>
-                <NotesList bookNotes={book.notes} bookId={book.id}></NotesList>
+                <NotesList bookNotes={bookData?.notes ?? []} bookId={bookData?.id ?? ''}></NotesList>
               </Box>
             </Container>
           </VStack>

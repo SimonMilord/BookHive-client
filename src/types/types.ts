@@ -19,6 +19,7 @@ export type Book = {
   excerpt?: string,
   firstSentence: string,
   rating: number,
+  ratingsCount: number,
   notes: Note[],
 }
 

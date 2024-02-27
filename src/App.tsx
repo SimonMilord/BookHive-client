@@ -7,33 +7,9 @@ import "./App.scss";
 import LoginPage from "./pages/Login/Login";
 import BookInfoPage from "./pages/BookInfoPage/bookInfoPage";
 import SearchResultsPage from "./pages/SearchResultPage/searchResultsPage";
-import { Book, BookStatus, SearchResult } from "./types/types";
+import { SearchResult } from "./types/types";
 import { useState } from "react";
 import SearchContext from "./context/SearchContext";
-
-const mockBookData: Book = {
-  id: '1',
-  title: 'The Lord Of The Rings',
-  author: 'J.R.R. Tolkien',
-  coverId: "3327791",
-  status: BookStatus.TO_READ,
-  isbn: '123456789',
-  pageCount: 899,
-  language: 'english',
-  genre: 'fantasy',
-  publisher: 'penguin',
-  yearPublished: '1954',
-  startDate: '2022-01-01',
-  finishedDate: null,
-  currentPage: 59,
-  excerpt: '',
-  firstSentence: 'Since it was first published in 1954, The Lord of the Rings has been a book people have treasured. Steeped in unrivalled magic and otherworldliness, its sweeping fantasy and epic adventure has touched the hearts of young and old alike. Over 150 million copies of its many editions have been sold around the world, and occasional collectors’ editions become prized and valuable items of publishing.',
-  rating: 5,
-  notes: [{id: '1', date: '2024-01-01', content: 'I really enjoyed the book.', book_id: '1'},
-    {id: '2', date: '2024-01-02', content: 'I can really relate to Frodo.', book_id: '2'},
-    {id: '3', date: '2024-01-03', content: 'They did Faramir dirty.', book_id: '3'}
-  ],
-}
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,7 +17,7 @@ const router = createBrowserRouter(
       <Route index element={<HomePage />} />
       {/* to change later */}
       <Route path="searchresults" element={<SearchResultsPage />} />
-      <Route path="bookinfo/:id" element={<BookInfoPage book={mockBookData}/>} />
+      <Route path="bookinfo/:id" element={<BookInfoPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>
