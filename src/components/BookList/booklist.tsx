@@ -1,24 +1,22 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import BookListItem from "../BookListItem/bookListItem";
 import { Book } from "src/types/types";
-
-const imagePlaceholder = "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg";
 
 interface BookListProps {
   booksArray: Book[];
 }
 const BookList = ({ booksArray }: BookListProps): JSX.Element => {
+
   return (
     <Grid templateColumns="repeat(9, 1fr)" gap={3} my={6}>
       {booksArray &&
         booksArray.map((book: any) => {
           return (
-            <GridItem key={book.book_id}>
-              <BookListItem
-                id={book.book_id}
-                image={book.image || imagePlaceholder}
-              />
-            </GridItem>
+            <BookListItem
+              key={book.id}
+              id={book.id}
+              imageId={book.coverId}
+            />
           );
         })}
     </Grid>

@@ -17,11 +17,15 @@ export interface ReadingCardProps {
 }
 
 const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
+  const currentProgress = parseFloat(((book.currentPage / book.pageCount) * 100).toFixed(2));
+  const coverImage = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
+  const date = new Date(book.startDate);
+  const startedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   return (
     // Should change the value 1 after bug fix for the key in the DB change!
     <ChakraLink
       as={ReactRouterLink}
-      to={`bookinfo/${1}`}
+      to={`bookinfo/${book.id}`}
       className="readingCard__link"
     >
       <Box
@@ -42,32 +46,32 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
             <Image
               boxSize="150px"
               objectFit="contain"
-              src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33.jpg"
+              src={coverImage}
               alt="Placeholder book cover"
             />
           </Box>
           <Grid templateColumns="repeat(2, 1fr)" width="100%">
             <GridItem className="readingCard__info">
               <Heading size="md">{"The lord of the rings"}</Heading>
-              <h2>Author: {"J.R.R. Tolkien"}</h2>
-              <h2>Year: {"1954"}</h2>
-              <h2>Pages: {"1178"}</h2>
+              <h2>Author: {book.author}</h2>
+              <h2>Year: {book.yearPublished}</h2>
+              <h2>Pages: {book.pageCount}</h2>
             </GridItem>
             <GridItem
               className="readingCard__date"
               display="flex"
               justifyContent="flex-end"
             >
-              <p>{"July 23"}</p>
+              <p>{startedDate}</p>
             </GridItem>
           </Grid>
         </Box>
         <Box className="readingCard__bottomSection">
           <Flex justifyContent="space-between">
             <h2>Progress:</h2>
-            {"30%"}
+            {`${currentProgress}%`}
           </Flex>
-          <Progress value={30} size="md" min={0} max={100} />
+          <Progress value={currentProgress} size="md" min={0} max={100} />
         </Box>
       </Box>
     </ChakraLink>

@@ -44,9 +44,9 @@ export default function HomePage() {
         throw new Error("Unable to fetch books");
       }
       const fetchedToReadBooks = await response.json();
-      setToReadBooks(fetchedToReadBooks);
-      setReadingBooks(fetchedToReadBooks); // TO CHANGE LATER WHEN ADDING STATUS IN DB
-      setFinishedBooks(fetchedToReadBooks); // TO CHANGE LATER WHEN ADDING STATUS IN DB
+      setToReadBooks(fetchedToReadBooks.toReadBooks);
+      setReadingBooks(fetchedToReadBooks.readingBooks);
+      setFinishedBooks(fetchedToReadBooks.finishedBooks);
     } catch (error) {
       console.error(error);
       setErrorMessage("Unable to fetch books to read from the server.");
@@ -73,7 +73,7 @@ export default function HomePage() {
                   </Badge>
                 </Heading>
                 <List>
-                  {readingBooks &&
+                  {readingBooks.length > 0 &&
                     readingBooks.map((book: Book, index) => (
                       <ListItem key={index}>
                         <ReadingCard book={book} />
