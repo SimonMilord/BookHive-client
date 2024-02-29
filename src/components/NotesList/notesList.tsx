@@ -13,11 +13,10 @@ import { Note } from "src/types/types";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 interface NotesListProps {
-  bookNotes: Note[];
   bookId: string;
 }
 
-const NotesList = ({ bookNotes, bookId }: NotesListProps): JSX.Element => {
+const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState<string>("");
   const [textareaHeight, setTextareaHeight] = useState<number>(0);
@@ -25,9 +24,8 @@ const NotesList = ({ bookNotes, bookId }: NotesListProps): JSX.Element => {
   const maxHeight = 200;
 
   useEffect(() => {
-    const sortedNotes = getSortedNotes(bookNotes);
-    setNotes(sortedNotes);
-  }, []);
+    getBookNotes(bookId);
+  }, [bookId]);
 
   useEffect(() => {
     if (newNote !== "") {
@@ -36,13 +34,46 @@ const NotesList = ({ bookNotes, bookId }: NotesListProps): JSX.Element => {
     }
   }, [newNote]);
 
-  const getTodayFormatted = () => {
-    let today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, "0");
-    const day = today.getDate().toString().padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
+  const getBookNotes = async (id: string) => {
+    try {
+      const bookId = Number(id);
+      const response = await fetch(
+        `http://localhost:8000/books/notes/${bookId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Unable to fetch notes for bookId: " + bookId);
+      }
+      const bookNotes = await response.json();
+      setNotes(bookNotes);
+    } catch (error) {
+      console.log("Error fetching notes for bookId: " + bookId, error);
+      return [];
+    }
+  };
+
+  const submitNewBookNote = async (date: String, content: String, bookId: string) => {
+    const book_id = Number(bookId);
+    console.log("book_id: ", book_id);
+    console.log("date: ", date);
+    console.log("content: ", content);
+    try {
+      const response = await fetch(`http://localhost:8000/books/notes/${book_id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date, content, book_id }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to add book to the to read list.");
+      };
+
+    } catch (error) {
+      console.log("Error submitting new note: ", error);
+    }
   };
 
   const adjustTextareaHeight = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -55,37 +86,39 @@ const NotesList = ({ bookNotes, bookId }: NotesListProps): JSX.Element => {
     adjustTextareaHeight(event);
   };
 
-  const getNewNoteId = () => {
-    const numberOfNotes = notes.length;
-    return (numberOfNotes + 1).toString();
-  };
-
-  const handleSubmitNewNote = () => {
+  const handleSubmitNewNote = async () => {
     if (newNote === "") {
       setEmptySubmittedNote(true);
       return;
     }
-    const todayDate = getTodayFormatted();
-    const newNoteId = getNewNoteId();
-    const newSortedNotes = getSortedNotes([
-      ...notes,
-      { id: newNoteId, content: newNote, date: todayDate, book_id: bookId},
-    ]);
-    setNotes(newSortedNotes);
+
+    await submitNewBookNote(new Date().toString(), newNote, bookId);
+    getBookNotes(bookId);
     setTextareaHeight(0);
     setNewNote("");
   };
 
-  const handleDeleteNote = (noteId: string) => {
-    const updatedNotes = notes.filter((note) => note.id !== noteId);
-    // will have to delete them by calling the server delete note route
-    setNotes(updatedNotes);
+  const handleDeleteNote = async (noteId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/books/notes/${noteId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to delete the note");
+      };
+
+      await response.json();
+      // const newNotes = notes.filter((note) => note.id !== noteId);
+    } catch (error) {
+      console.log('Error deleting note: ' + noteId, error);
+    }
+    getBookNotes(bookId);
   };
 
-  const getSortedNotes = (notes: Note[]) => {
-    return [...notes].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+  const getNoteDate = (date: string) => {
+    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
   return (
@@ -128,7 +161,7 @@ const NotesList = ({ bookNotes, bookId }: NotesListProps): JSX.Element => {
                     justifyContent="flex-start"
                     maxWidth="20%"
                   >
-                    <Text>{note.date}</Text>
+                    <Text>{getNoteDate(note.date)}</Text>
                     <Button
                       colorScheme="blue"
                       variant="ghost"

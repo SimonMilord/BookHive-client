@@ -37,7 +37,6 @@ const BookInfoPage = (): JSX.Element => {
   const [bookStatus, setBookStatus] = useState<string>("To Read");
   const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState<string>("Start");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(0);
   const [bookData, setBookData] = useState<Book>();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -83,7 +82,7 @@ const BookInfoPage = (): JSX.Element => {
   };
 
   // Given a book id, delete it from the database
-  const onDeleteBtnClick = async (title: string) => {
+  const handleDeleteBook = async (title: string) => {
     try {
       const response = await fetch(`http://localhost:8000/books/${id}`,
       {
@@ -121,6 +120,9 @@ const BookInfoPage = (): JSX.Element => {
   };
 
   const readingLogDuration = getBookReadingDuration(bookData);
+  const startDate = bookData?.startDate ? new Date(bookData?.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Not started yet';
+  const currentPage = bookData?.currentPage ?? 0;
+  const bookReadingStatus = bookData?.status ?? 'To Read';
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -131,7 +133,7 @@ const BookInfoPage = (): JSX.Element => {
   };
 
   const handleLogUpdate = (value: number) => {
-    setCurrentPage(value);
+    // Call the server to update the current page
     setIsModalOpen(false);
   };
 
@@ -174,7 +176,7 @@ const BookInfoPage = (): JSX.Element => {
                     <Button
                       colorScheme="blue"
                       className="bookInfoPage__deleteBookButton"
-                      onClick={() => onDeleteBtnClick(bookData?.title || '')}
+                      onClick={() => handleDeleteBook(bookData?.title || '')}
                     >
                       <DeleteIcon />
                     </Button>
@@ -218,13 +220,13 @@ const BookInfoPage = (): JSX.Element => {
                 <Grid templateColumns="repeat(6, 1fr)" gap={6} my={5}>
                   <GridItem>
                     <Heading size="sm">Status</Heading>
-                    <Text>{bookStatus}</Text>
+                    <Text>{bookReadingStatus}</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">
-                      {bookStatus === "Finished" ? "Finished" : "Started"}
+                      {bookReadingStatus === "Finished" ? "Finished" : "Started"}
                     </Heading>
-                    <Text>{bookData?.startDate ?? "Not started yet"}</Text>
+                    <Text>{startDate}</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Read time</Heading>
@@ -352,7 +354,7 @@ const BookInfoPage = (): JSX.Element => {
                     </HStack>
                   </Box>
                 </Box>
-                <NotesList bookNotes={bookData?.notes ?? []} bookId={bookData?.id ?? ''}></NotesList>
+                <NotesList bookId={bookData?.id ?? ''}></NotesList>
               </Box>
             </Container>
           </VStack>
