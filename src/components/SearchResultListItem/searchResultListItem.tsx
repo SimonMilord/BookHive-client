@@ -32,10 +32,11 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
     if (!isAlreadyInLibrary) {
       try {
         // Will need to refactor this to use the server once deployed
+        const resultToSend = filteredResultToSendToServer(result);
         const response = await fetch("http://localhost:8000/books/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(result),
+          body: JSON.stringify(resultToSend),
         });
 
         if (!response.ok) {
@@ -88,6 +89,29 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       console.log(error);
       return [];
     }
+  };
+
+  const filteredResultToSendToServer = (result: SearchResult) => {
+    const resultMap = {
+      title: result.title,
+      author: result.author_name?.join(', '),
+      coverId: result.cover_i,
+      status: "To Read",
+      isbn: result.isbn?.[0],
+      pageCount: result.number_of_pages_median,
+      language: result.language.join(', '),
+      genre: result.subject?.slice(0, 10).join(', '),
+      publisher: result.publisher?.slice(0, 5).join(', '),
+      yearPublished: result.first_publish_year,
+      currentPage: 0,
+      startDate: null,
+      finishedDate: null,
+      excerpt: null,
+      firstSentence: result.first_sentence?.[0],
+      rating: Math.round(result.ratings_average),
+      ratingsCount: result.ratings_count,
+    };
+    return resultMap;
   };
 
   return (

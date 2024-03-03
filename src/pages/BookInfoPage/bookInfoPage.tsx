@@ -17,6 +17,7 @@ import {
   Icon,
   Tag,
   Link,
+  useToast,
 } from "@chakra-ui/react";
 import "./bookInfoPage.scss";
 import { Link as ReactRouterLink, useNavigate, useParams } from "react-router-dom";
@@ -40,6 +41,7 @@ const BookInfoPage = (): JSX.Element => {
   const [bookData, setBookData] = useState<Book>();
   const navigate = useNavigate();
   const { id } = useParams();
+  const toast = useToast();
 
   useEffect(() => {
     fetchBookData();
@@ -75,7 +77,6 @@ const BookInfoPage = (): JSX.Element => {
       }
       const bookDataResponse = await response.json();
       await setBookData(bookDataResponse);
-      console.log("Book data: ", bookDataResponse);
     } catch (error) {
       console.error("Error fetching book data: " + error);
     }
@@ -102,7 +103,6 @@ const BookInfoPage = (): JSX.Element => {
       });
       navigate("/");
     } catch (error) {
-      console.log('error deleting book: ', error);
       console.error("Error deleting book: " + error);
     }
   };
@@ -201,9 +201,9 @@ const BookInfoPage = (): JSX.Element => {
                     />
                   </GridItem>
                   <GridItem colSpan={1}>
-                    <Text>Title: {bookData?.title}</Text>
-                    <Text>Author: {bookData?.author}</Text>
-                    <Text>Pages: {bookData?.pageCount}</Text>
+                    <Text><strong>Title:</strong> {bookData?.title}</Text>
+                    <Text><strong>Author:</strong> {bookData?.author}</Text>
+                    <Text><strong>Pages:</strong> {bookData?.pageCount}</Text>
                   </GridItem>
                   <GridItem colSpan={4}>
                     <Text noOfLines={4} as="cite">
@@ -365,7 +365,3 @@ const BookInfoPage = (): JSX.Element => {
 };
 
 export default BookInfoPage;
-function toast(arg0: { title: string; status: string; duration: number; isClosable: boolean; }) {
-  throw new Error("Function not implemented.");
-}
-
