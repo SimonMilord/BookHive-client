@@ -32,7 +32,7 @@ import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
 
 const BookInfoPage = (): JSX.Element => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen, onClose } = useDisclosure();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   // Possible values: To Read | Reading | Finished
   const [bookStatus, setBookStatus] = useState<string>("To Read");
@@ -47,13 +47,34 @@ const BookInfoPage = (): JSX.Element => {
     fetchBookData();
   }, []);
 
-  const onStatusBtnClick = () => {
+  const onStatusBtnClick = async () => {
+    getStatusBtnLabel(bookData?.status || 'Start');
+    try {
+      const response = await fetch(`http://localhost:8000/books/${bookId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPage: bookData?.currentPage,
+          status: bookStatus,
+          startedDate: bookData?.startDate,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to update status of the book");
+      };
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getStatusBtnLabel = (bookStatus: string) => {
     switch (bookStatus) {
       case "To Read":
-        setBookStatus("Reading");
+        setBookStatus("Started");
         setBookStatusBtnLabel("Finish");
         break;
-      case "Reading":
+      case "Started":
         setBookStatus("Finished");
         setBookStatusBtnLabel("Read again");
         break;
@@ -67,8 +88,7 @@ const BookInfoPage = (): JSX.Element => {
   // Fetch the book data from the server given the id
   const fetchBookData = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/books/${id}`,
-      {
+      const response = await fetch(`http://localhost:8000/books/${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -80,6 +100,7 @@ const BookInfoPage = (): JSX.Element => {
     } catch (error) {
       console.error("Error fetching book data: " + error);
     }
+
   };
 
   // Given a book id, delete it from the database
@@ -107,10 +128,8 @@ const BookInfoPage = (): JSX.Element => {
     }
   };
 
-  // TO FIX LATER
   const getBookReadingDuration = (book?: Book) => {
     const today: Date = new Date();
-    // where startDate is a string : '2024-01-01' book.startDate
     const startedDay: Date = new Date(book?.startDate ?? today.toISOString());
     const timeDifference: number = today.getTime() - startedDay.getTime();
     const daysDifference: number = Math.floor(
@@ -119,25 +138,42 @@ const BookInfoPage = (): JSX.Element => {
     return daysDifference > 0 ? daysDifference : 0;
   };
 
+  const getBookDate = (book?: Book) => {
+    const startDate = book?.startDate ? new Date(book?.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Not started yet';
+    const finishedDate = book?.finishedDate ? new Date(book?.finishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
+    const bookStatus = book?.status ?? 'To Read';
+
+    if (bookStatus === "Finished" && finishedDate) {
+      return finishedDate;
+    } else if (bookStatus === "Started" && startDate) {
+      return startDate;
+    } else {
+      return 'Not started yet';
+    }
+  };
+
   const readingLogDuration = getBookReadingDuration(bookData);
-  const startDate = bookData?.startDate ? new Date(bookData?.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Not started yet';
+  const readingLogDate = getBookDate(bookData);
   const currentPage = bookData?.currentPage ?? 0;
   const bookReadingStatus = bookData?.status ?? 'To Read';
+  const pageCount = bookData?.pageCount ?? 0;
+  const genre = bookData?.genre?.split(', ');
+  const bookId = id ?? '';
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
+    await fetchBookData();
     setIsModalOpen(false);
   };
 
   const handleLogUpdate = (value: number) => {
     // Call the server to update the current page
     setIsModalOpen(false);
+    fetchBookData();
   };
-
-  const genre = bookData?.genre?.split(', ');
 
   return (
     <div className="bookInfoPage">
@@ -226,7 +262,7 @@ const BookInfoPage = (): JSX.Element => {
                     <Heading size="sm">
                       {bookReadingStatus === "Finished" ? "Finished" : "Started"}
                     </Heading>
-                    <Text>{startDate}</Text>
+                    <Text>{readingLogDate}</Text>
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Read time</Heading>
@@ -255,6 +291,10 @@ const BookInfoPage = (): JSX.Element => {
                       onClose={handleCloseModal}
                       onLogUpdate={handleLogUpdate}
                       currentPage={currentPage}
+                      status={bookReadingStatus}
+                      startedDate={readingLogDate}
+                      bookId={bookId}
+                      pageCount={pageCount}
                     />
                   </GridItem>
                 </Grid>
@@ -283,7 +323,7 @@ const BookInfoPage = (): JSX.Element => {
                   </Text>
                   <Text>
                     <strong>Rating: </strong>
-                    {bookData?.rating}/5 (
+                    {bookData?.rating ?? "?"}/5 (
                     {bookData?.ratingsCount} ratings)
                   </Text>
                   <Text>

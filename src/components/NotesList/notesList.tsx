@@ -55,16 +55,13 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
     }
   };
 
-  const submitNewBookNote = async (date: String, content: String, bookId: string) => {
+  const submitNewBookNote = async (content: String, bookId: string) => {
     const book_id = Number(bookId);
-    console.log("book_id: ", book_id);
-    console.log("date: ", date);
-    console.log("content: ", content);
     try {
       const response = await fetch(`http://localhost:8000/books/notes/${book_id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date, content, book_id }),
+        body: JSON.stringify({ content, book_id }),
       });
 
       if (!response.ok) {
@@ -92,7 +89,7 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
       return;
     }
 
-    await submitNewBookNote(new Date().toString(), newNote, bookId);
+    await submitNewBookNote(newNote, bookId);
     getBookNotes(bookId);
     setTextareaHeight(0);
     setNewNote("");

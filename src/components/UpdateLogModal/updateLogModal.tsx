@@ -11,34 +11,129 @@ import {
   FormControl,
   Button,
   FormErrorMessage,
+  Select,
+  Stack,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
+const statusOptions = ["To Read", "Started", "Finished"];
 interface UpdateLogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogUpdate: (value: number) => void;
-  currentPage: number | undefined;
+  onLogUpdate: (currentPage: number, status: string, startedDate: string, bookId: string, pageCount: number) => void;
+  currentPage: number;
+  status: string,
+  startedDate: string,
+  bookId: string,
+  pageCount: number
 }
-const UpdateLogModal: React.FC<UpdateLogModalProps> = ({ isOpen, onClose, onLogUpdate, currentPage }) => {
+const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
+  isOpen,
+  onClose,
+  currentPage,
+  status,
+  startedDate,
+  bookId,
+  pageCount
+}) => {
   const initialRef = useRef<HTMLInputElement>(null);
   const finalRef = useRef(null);
   const [isError, setIsError] = useState<boolean>(false);
+  const [updatedCurrentPage, setUpdatedCurrentPage] = useState<number>(currentPage);
+  const [updatedStatus, setUpdatedStatus] = useState<string>(status);
+  const [updatedStartedDate, setUpdatedStartedDate] = useState<string>(startedDate);
+  const [updatedFinishedDate, setUpdatedFinishedDate] = useState<string | null>(null);
+  const toast = useToast();
 
-  useEffect(() => {
-    setIsError(false);
-    if (initialRef.current && currentPage !== undefined) {
-      initialRef.current.value = currentPage.toString();
+  const handleUpdateReadingLog = async () => {
+    try {
+      const latestStatus = getUpdatedStatus(status);
+      const response = await fetch(`http://localhost:8000/books/${bookId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPage: updatedCurrentPage,
+          status: latestStatus,
+          startedDate: updatedStartedDate,
+          finishedDate: updatedFinishedDate !== null ? updatedFinishedDate : null,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to update reading log");
+      };
+
+      onClose();
+      toast({
+        title: "Reading log successfully updated",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error(error);
     }
-  }, [currentPage]);
+  };
 
-  const handleSave = () => {
-    const value = initialRef.current?.value;
-    if (value && value !== '') {
-      onLogUpdate(parseInt(value));
-    } else {
+  const handleChangeStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = event.target.value;
+    if (newStatus === "Finished") {
+      setUpdatedFinishedDate(new Date().toString());
+    }
+
+    if (newStatus === "Started") {
+      setUpdatedStartedDate(new Date().toString());
+    }
+
+    setUpdatedStatus(newStatus);
+    getUpdatedStatus(updatedStatus);
+  };
+
+  const handleCurrentPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPage = parseInt(event.target.value);
+    switch (true) {
+      case newPage < 0 || newPage > pageCount:
+        setIsError(true);
+        break;
+      case newPage > 0 && newPage < pageCount:
+        setUpdatedCurrentPage(newPage);
+        setUpdatedStatus('Started');
+        setIsError(false);
+        break;
+      case newPage === pageCount:
+        setUpdatedCurrentPage(newPage);
+        setUpdatedStatus('Finished');
+        setUpdatedFinishedDate(new Date().toString());
+        setIsError(false);
+        break;
+      default:
+        setUpdatedCurrentPage(0);
+        setUpdatedStatus('To Read');
+        setIsError(false);
+        break;
+    }
+  };
+
+  const handleStartedDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value > new Date().toISOString().split('T')[0]) {
       setIsError(true);
     }
+    setUpdatedStartedDate(event.target.value);
+  };
+
+  const getUpdatedStatus = (status: string) => {
+    if (status === "To Read" && (updatedStartedDate !== null)) {
+      return "Started";
+    }
+    return updatedStatus;
+  };
+
+  const getDefaultDateValue = () => {
+    if (startedDate !== 'Not started yet') {
+      return new Date(startedDate).toISOString().split('T')[0];
+    };
+    return;
   };
 
   return (
@@ -54,21 +149,50 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({ isOpen, onClose, onLogU
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl isInvalid={isError}>
-            <FormLabel>Current page</FormLabel>
-            <Input
-              ref={initialRef}
-              type="number"
-              name="currentPage"
-              min="0"
-              placeholder="0"
-              defaultValue={currentPage !== undefined ? currentPage.toString() : '0'}
-            />
-            {isError ? (<FormErrorMessage>Please enter a valid page number</FormErrorMessage>) : null}
+            <Stack spacing={2}>
+              <FormLabel>Status</FormLabel>
+              <Select variant="filled" onChange={handleChangeStatus} placeholder={status}>
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+                ;
+              </Select>
+              <FormLabel>Started date</FormLabel>
+              <Input
+                size="md"
+                type="date"
+                defaultValue={getDefaultDateValue()}
+                onChange={(e) => handleStartedDateChange(e)}
+              />
+              <FormLabel>Current page</FormLabel>
+              <Input
+                ref={initialRef}
+                type="number"
+                name="currentPage"
+                variant="filled"
+                min="0"
+                max={pageCount}
+                placeholder="0"
+                defaultValue={
+                  currentPage !== undefined ? currentPage.toString() : "0"
+                }
+                onChange={(e) => {
+                  handleCurrentPageChange(e);
+                }}
+              />
+              {isError ? (
+                <FormErrorMessage>
+                  Please enter a valid page number
+                </FormErrorMessage>
+              ) : null}
+            </Stack>
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSave}>
+          <Button colorScheme="blue" mr={3} onClick={handleUpdateReadingLog}>
             Save
           </Button>
           <Button onClick={onClose}>Cancel</Button>

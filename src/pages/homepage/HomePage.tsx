@@ -44,6 +44,8 @@ export default function HomePage() {
         throw new Error("Unable to fetch books");
       }
       const fetchedToReadBooks = await response.json();
+      console.log(fetchedToReadBooks);
+
       setToReadBooks(fetchedToReadBooks.toReadBooks);
       setReadingBooks(fetchedToReadBooks.readingBooks);
       setFinishedBooks(fetchedToReadBooks.finishedBooks);
