@@ -18,9 +18,15 @@ import {
   Tag,
   Link,
   useToast,
+  TagLabel,
+  Flex,
 } from "@chakra-ui/react";
 import "./bookInfoPage.scss";
-import { Link as ReactRouterLink, useNavigate, useParams } from "react-router-dom";
+import {
+  Link as ReactRouterLink,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import PageHeader from "src/components/PageHeader/pageHeader";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
@@ -48,7 +54,7 @@ const BookInfoPage = (): JSX.Element => {
   }, []);
 
   const onStatusBtnClick = async () => {
-    getStatusBtnLabel(bookData?.status || 'Start');
+    getStatusBtnLabel(bookData?.status || "Start");
     try {
       const response = await fetch(`http://localhost:8000/books/${bookId}`, {
         method: "PUT",
@@ -62,7 +68,7 @@ const BookInfoPage = (): JSX.Element => {
 
       if (!response.ok) {
         throw new Error("Unable to update status of the book");
-      };
+      }
     } catch (error) {
       console.error(error);
     }
@@ -93,21 +99,21 @@ const BookInfoPage = (): JSX.Element => {
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) {
-        throw new Error("Unable to fetch book with id: " + id + " data from the server.");
+        throw new Error(
+          "Unable to fetch book with id: " + id + " data from the server."
+        );
       }
       const bookDataResponse = await response.json();
       await setBookData(bookDataResponse);
     } catch (error) {
       console.error("Error fetching book data: " + error);
     }
-
   };
 
   // Given a book id, delete it from the database
   const handleDeleteBook = async (title: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/books/${id}`,
-      {
+      const response = await fetch(`http://localhost:8000/books/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title }),
@@ -118,7 +124,7 @@ const BookInfoPage = (): JSX.Element => {
 
       toast({
         title: `${title} successfully removed from your library.`,
-        status: 'info',
+        status: "info",
         duration: 5000,
         isClosable: true,
       });
@@ -139,26 +145,39 @@ const BookInfoPage = (): JSX.Element => {
   };
 
   const getBookDate = (book?: Book) => {
-    const startDate = book?.startDate ? new Date(book?.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Not started yet';
-    const finishedDate = book?.finishedDate ? new Date(book?.finishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
-    const bookStatus = book?.status ?? 'To Read';
+    const startDate = book?.startDate
+      ? new Date(book?.startDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "Not started yet";
+    const finishedDate = book?.finishedDate
+      ? new Date(book?.finishedDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : null;
+    const bookStatus = book?.status ?? "To Read";
 
     if (bookStatus === "Finished" && finishedDate) {
       return finishedDate;
     } else if (bookStatus === "Started" && startDate) {
       return startDate;
     } else {
-      return 'Not started yet';
+      return "Not started yet";
     }
   };
 
   const readingLogDuration = getBookReadingDuration(bookData);
   const readingLogDate = getBookDate(bookData);
   const currentPage = bookData?.currentPage ?? 0;
-  const bookReadingStatus = bookData?.status ?? 'To Read';
+  const bookReadingStatus = bookData?.status ?? "To Read";
   const pageCount = bookData?.pageCount ?? 0;
-  const genre = bookData?.genre?.split(', ');
-  const bookId = id ?? '';
+  const genre = bookData?.genre?.split(", ").splice(0, 5);
+  const publisher = bookData?.publisher.split(", ")[0];
+  const bookId = id ?? "";
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -212,7 +231,7 @@ const BookInfoPage = (): JSX.Element => {
                     <Button
                       colorScheme="blue"
                       className="bookInfoPage__deleteBookButton"
-                      onClick={() => handleDeleteBook(bookData?.title || '')}
+                      onClick={() => handleDeleteBook(bookData?.title || "")}
                     >
                       <DeleteIcon />
                     </Button>
@@ -221,32 +240,30 @@ const BookInfoPage = (): JSX.Element => {
               </Box>
 
               <Box className="bookInfoPage__topSection">
-                <Grid
-                  templateRows="repeat(2, 1fr)"
-                  templateColumns="repeat(5, 1fr)"
-                  gap={3}
-                >
-                  <GridItem rowSpan={2} colSpan={1}>
-                    <Image
-                      src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
-                      fit="contain"
-                      minH={200}
-                      maxH={250}
-                      maxW="fit-content"
-                      borderRadius="8px"
-                    />
-                  </GridItem>
-                  <GridItem colSpan={1}>
-                    <Text><strong>Title:</strong> {bookData?.title}</Text>
-                    <Text><strong>Author:</strong> {bookData?.author}</Text>
-                    <Text><strong>Pages:</strong> {bookData?.pageCount}</Text>
-                  </GridItem>
-                  <GridItem colSpan={4}>
+                <Flex>
+                  <Image
+                    src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
+                    fit="contain"
+                    minH={200}
+                    maxH={250}
+                    maxW="fit-content"
+                    borderRadius="8px"
+                  />
+                  <Box ml={5}>
+                    <Text>
+                      <strong>Title:</strong> {bookData?.title}
+                    </Text>
+                    <Text>
+                      <strong>Author:</strong> {bookData?.author}
+                    </Text>
+                    <Text>
+                      <strong>Pages:</strong> {bookData?.pageCount}
+                    </Text>
                     <Text noOfLines={4} as="cite">
                       {bookData?.firstSentence}
                     </Text>
-                  </GridItem>
-                </Grid>
+                  </Box>
+                </Flex>
               </Box>
             </Container>
             <Divider />
@@ -260,7 +277,9 @@ const BookInfoPage = (): JSX.Element => {
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">
-                      {bookReadingStatus === "Finished" ? "Finished" : "Started"}
+                      {bookReadingStatus === "Finished"
+                        ? "Finished"
+                        : "Started"}
                     </Heading>
                     <Text>{readingLogDate}</Text>
                   </GridItem>
@@ -275,7 +294,11 @@ const BookInfoPage = (): JSX.Element => {
                   <GridItem>
                     <Heading size="sm">Progress</Heading>
                     <Text>
-                      {((currentPage / (bookData?.pageCount ?? 0)) * 100).toFixed(2)}%
+                      {(
+                        (currentPage / (bookData?.pageCount ?? 0)) *
+                        100
+                      ).toFixed(2)}
+                      %
                     </Text>
                   </GridItem>
                   <GridItem display="flex" justifyContent="flex-end">
@@ -323,19 +346,19 @@ const BookInfoPage = (): JSX.Element => {
                   </Text>
                   <Text>
                     <strong>Rating: </strong>
-                    {bookData?.rating ?? "?"}/5 (
-                    {bookData?.ratingsCount} ratings)
+                    {bookData?.rating ?? "?"}/5 ({bookData?.ratingsCount}{" "}
+                    ratings)
                   </Text>
                   <Text>
                     <strong>Publisher: </strong>
-                    {bookData?.publisher}
+                    {publisher}
                   </Text>
                   <Text>
                     <strong>ISBN #: </strong>
                     {bookData?.isbn}
                   </Text>
                   <Text>
-                    <strong>Find:</strong>
+                    <strong>Find: </strong>
                     <Link
                       href={`https://www.amazon.ca/dp/${bookData?.id}`}
                       textDecoration="underline"
@@ -346,7 +369,7 @@ const BookInfoPage = (): JSX.Element => {
                   </Text>
                   <Text>
                     <strong>Subjects: </strong>
-                    <HStack spacing={3} my={1}>
+                    <HStack spacing={3} my={1} wrap="wrap">
                       {genre?.map((subject, index) => (
                         <Tag
                           key={index}
@@ -354,7 +377,7 @@ const BookInfoPage = (): JSX.Element => {
                           variant="subtle"
                           colorScheme="blue"
                         >
-                          {subject}
+                          <TagLabel>{subject}</TagLabel>
                         </Tag>
                       ))}
                     </HStack>
@@ -394,7 +417,7 @@ const BookInfoPage = (): JSX.Element => {
                     </HStack>
                   </Box>
                 </Box>
-                <NotesList bookId={bookData?.id ?? ''}></NotesList>
+                <NotesList bookId={bookData?.id ?? ""}></NotesList>
               </Box>
             </Container>
           </VStack>

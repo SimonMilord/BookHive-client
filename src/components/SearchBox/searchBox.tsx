@@ -58,7 +58,7 @@ const SearchBox: React.FC<{}> = () => {
       // Parses the raw search results to filter out the ones without a cover_i
       const parsedSearchResults = rawSearchResults.filter((result: SearchResult) => result.cover_i !== undefined);
       setSearchResults(parsedSearchResults);
-      console.log("Search results: ", parsedSearchResults[0]); // to remove later
+      console.log("Search results: ", parsedSearchResults);
     } catch (error) {
       console.error(error);
     }
