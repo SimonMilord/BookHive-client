@@ -119,7 +119,6 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       my={3}
       direction={{ base: "column", sm: "row" }}
       className="searchResultListItem"
-      h={"250px"}
     >
       <Box
         className="searchResultListItem__imageContainer"
