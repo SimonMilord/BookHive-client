@@ -36,6 +36,7 @@ import NotesList from "src/components/NotesList/notesList";
 import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
 import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
+import { getAuthors, getGenres } from "src/utils/functions";
 
 const BookInfoPage = (): JSX.Element => {
   const { onOpen, onClose } = useDisclosure();
@@ -170,26 +171,14 @@ const BookInfoPage = (): JSX.Element => {
     }
   };
 
-  /**
-   * Filters out the genres that are not alphanumeric and returns max 5 genres
-   * @param genres
-   * @returns string[]
-   */
-  const getGenres = (genres: string) => {
-    const genresArray = genres.split(", ");
-    const filteredArray = genresArray.filter((genre) => {
-      return /^[A-Za-z0-9 ]+$/.test(genre);
-    });
-    return filteredArray.slice(0, 5);
-  };
-
   const readingLogDuration = getBookReadingDuration(bookData);
   const readingLogDate = getBookDate(bookData);
   const currentPage = bookData?.currentPage ?? 0;
   const bookReadingStatus = bookData?.status ?? "To Read";
   const pageCount = bookData?.pageCount ?? 0;
-  const genres = getGenres(bookData?.genre ?? "");
+  const genres = getGenres(bookData?.genre ?? "", 5);
   const publisher = bookData?.publisher.split(", ")[0];
+  const authors = getAuthors(bookData?.author?.split(', ') ?? [], 5);
   const bookId = id ?? "";
 
   const handleOpenModal = () => {
@@ -267,12 +256,12 @@ const BookInfoPage = (): JSX.Element => {
                       <strong>Title:</strong> {bookData?.title}
                     </Text>
                     <Text>
-                      <strong>Author:</strong> {bookData?.author}
+                      <strong>Author:</strong> {authors}
                     </Text>
                     <Text>
                       <strong>Pages:</strong> {bookData?.pageCount}
                     </Text>
-                    <Text noOfLines={4} as="cite">
+                    <Text noOfLines={4} as="cite" my={3}>
                       {bookData?.firstSentence}
                     </Text>
                   </Box>
@@ -347,7 +336,7 @@ const BookInfoPage = (): JSX.Element => {
                   </Text>
                   <Text>
                     <strong>Author: </strong>
-                    {bookData?.author}
+                    {authors}
                   </Text>
                   <Text>
                     <strong>Year: </strong>

@@ -7,12 +7,15 @@ import {
   Stack,
   Button,
   Divider,
-  Badge,
   useToast,
+  TagLabel,
+  Tag,
 } from "@chakra-ui/react";
 import { SearchResult } from "src/types/types";
 import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
+import { getAuthors, getGenres } from "src/utils/functions";
+
 const imagePlaceholder =
   "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg"; // to replace later for proper placeholder
 
@@ -148,8 +151,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
             {result.author_name ? (
               <Text>
                 <strong>Author:</strong>{" "}
-                {result.author_name &&
-                  result.author_name.map((author: string) => author).join(", ")}
+                {getAuthors(result.author_name, 5)}
               </Text>
             ) : null}
             {result.first_publish_year ? (
@@ -172,10 +174,10 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
             </Box>
             <Stack direction="row" wrap="wrap" mt={2}>
               {result.subject &&
-                result.subject.slice(0, 5).map((subject: string, index) => (
-                  <Badge key={index} colorScheme="blue" variant="subtle">
-                    {subject}
-                  </Badge>
+                getGenres(result.subject.join(', '), 5).map((subject: string, index) => (
+                  <Tag key={index} size="md" variant="subtle" colorScheme="blue">
+                    <TagLabel>{subject}</TagLabel>
+                  </Tag>
                 ))}
             </Stack>
           </CardBody>
