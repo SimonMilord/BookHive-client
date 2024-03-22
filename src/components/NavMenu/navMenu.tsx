@@ -46,9 +46,6 @@ const NavMenu = (): JSX.Element => {
             <Link to="/profile">
               <MenuItem>Profile</MenuItem>
             </Link>
-            <Link to="/settings">
-              <MenuItem>Settings</MenuItem>
-            </Link>
             <MenuDivider />
             <Link to="/login">
               <MenuItem>Sign out</MenuItem>
