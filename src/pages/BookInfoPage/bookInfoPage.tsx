@@ -170,12 +170,25 @@ const BookInfoPage = (): JSX.Element => {
     }
   };
 
+  /**
+   * Filters out the genres that are not alphanumeric and returns max 5 genres
+   * @param genres
+   * @returns string[]
+   */
+  const getGenres = (genres: string) => {
+    const genresArray = genres.split(", ");
+    const filteredArray = genresArray.filter((genre) => {
+      return /^[A-Za-z0-9 ]+$/.test(genre);
+    });
+    return filteredArray.slice(0, 5);
+  };
+
   const readingLogDuration = getBookReadingDuration(bookData);
   const readingLogDate = getBookDate(bookData);
   const currentPage = bookData?.currentPage ?? 0;
   const bookReadingStatus = bookData?.status ?? "To Read";
   const pageCount = bookData?.pageCount ?? 0;
-  const genre = bookData?.genre?.split(", ").splice(0, 5);
+  const genres = getGenres(bookData?.genre ?? "");
   const publisher = bookData?.publisher.split(", ")[0];
   const bookId = id ?? "";
 
@@ -370,7 +383,7 @@ const BookInfoPage = (): JSX.Element => {
                   <Text>
                     <strong>Subjects: </strong>
                     <HStack spacing={3} my={1} wrap="wrap">
-                      {genre?.map((subject, index) => (
+                      {genres?.map((subject, index) => (
                         <Tag
                           key={index}
                           size="md"
