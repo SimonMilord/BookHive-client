@@ -48,7 +48,9 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
         throw new Error("Unable to fetch notes for bookId: " + bookId);
       }
       const bookNotes = await response.json();
-      setNotes(bookNotes);
+
+      const sortedBookNotes = sortBookNotes(bookNotes);
+      setNotes(sortedBookNotes);
     } catch (error) {
       console.log("Error fetching notes for bookId: " + bookId, error);
       return [];
@@ -58,16 +60,18 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
   const submitNewBookNote = async (content: String, bookId: string) => {
     const book_id = Number(bookId);
     try {
-      const response = await fetch(`http://localhost:8000/books/notes/${book_id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content, book_id }),
-      });
+      const response = await fetch(
+        `http://localhost:8000/books/notes/${book_id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content, book_id }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Unable to add book to the to read list.");
-      };
-
+      }
     } catch (error) {
       console.log("Error submitting new note: ", error);
     }
@@ -95,27 +99,45 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
     setNewNote("");
   };
 
+  // sorts the notes by date and then then by id if 2 notes have the same date
+  const sortBookNotes = (bookNotes: Note[]) => {
+    const sortedBookNotes = bookNotes.sort((a: Note, b: Note) => {
+      const dateComp = b.date.localeCompare(a.date);
+      if (dateComp !== 0) return dateComp;
+
+      return Number(b.id) - Number(a.id);
+    });
+
+    return sortedBookNotes;
+  };
+
   const handleDeleteNote = async (noteId: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/books/notes/${noteId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `http://localhost:8000/books/notes/${noteId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Unable to delete the note");
-      };
+      }
 
       await response.json();
-      // const newNotes = notes.filter((note) => note.id !== noteId);
     } catch (error) {
-      console.log('Error deleting note: ' + noteId, error);
+      console.log("Error deleting note: " + noteId, error);
     }
     getBookNotes(bookId);
   };
 
   const getNoteDate = (date: string) => {
-    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
