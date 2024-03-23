@@ -56,7 +56,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
           currentPage: updatedCurrentPage,
           status: latestStatus,
           startedDate: updatedStartedDate,
-          finishedDate: updatedFinishedDate !== null ? updatedFinishedDate : null,
+          finishedDate: updatedFinishedDate ?? updatedFinishedDate,
         }),
       });
 
@@ -99,6 +99,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
       case newPage > 0 && newPage < pageCount:
         setUpdatedCurrentPage(newPage);
         setUpdatedStatus('Started');
+        setUpdatedStartedDate(new Date().toString());
         setIsError(false);
         break;
       case newPage === pageCount:

@@ -22,6 +22,7 @@ export type Book = {
   ratingsCount: number,
   notes: Note[],
   amazonId: string,
+  myRating: number | null,
 }
 
 export enum BookStatus {

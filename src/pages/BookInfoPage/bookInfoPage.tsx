@@ -14,7 +14,6 @@ import {
   ButtonGroup,
   Link as ChakraLink,
   HStack,
-  Icon,
   Tag,
   Link,
   useToast,
@@ -30,17 +29,16 @@ import {
 import PageHeader from "src/components/PageHeader/pageHeader";
 import SidebarContent from "src/components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
-import { FaStar, FaRegStar } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import NotesList from "src/components/NotesList/notesList";
 import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
 import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
 import { getAuthors, getGenres } from "src/utils/functions";
+import RatingStars from "src/components/RatingStars/ratingStars";
 
 const BookInfoPage = (): JSX.Element => {
   const { onOpen, onClose } = useDisclosure();
-  const [hoveredIndex, setHoveredIndex] = useState(null);
   // Possible values: To Read | Reading | Finished
   const [bookStatus, setBookStatus] = useState<string>("To Read");
   const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState<string>("Start");
@@ -105,6 +103,7 @@ const BookInfoPage = (): JSX.Element => {
         );
       }
       const bookDataResponse = await response.json();
+      console.log(bookDataResponse);
       await setBookData(bookDataResponse);
     } catch (error) {
       console.error("Error fetching book data: " + error);
@@ -399,27 +398,7 @@ const BookInfoPage = (): JSX.Element => {
                     <Heading size="sm" my={4} mr={1}>
                       My rating:
                     </Heading>
-                    <HStack>
-                      {[1, 2, 3, 4, 5].map((index) => (
-                        <Icon
-                          key={index}
-                          as={
-                            hoveredIndex !== null && index <= hoveredIndex
-                              ? FaStar
-                              : FaRegStar
-                          }
-                          boxSize={6}
-                          color={
-                            hoveredIndex !== null && index <= hoveredIndex
-                              ? "yellow.500"
-                              : "gray.500"
-                          }
-                          cursor="pointer"
-                          onMouseEnter={() => setHoveredIndex(null)}
-                          onMouseLeave={() => setHoveredIndex(null)}
-                        />
-                      ))}
-                    </HStack>
+                    <RatingStars myRating={bookData?.myRating ?? null} bookId={bookData?.id ?? ""} />
                   </Box>
                 </Box>
                 <NotesList bookId={bookData?.id ?? ""}></NotesList>

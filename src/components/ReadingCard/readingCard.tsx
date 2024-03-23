@@ -11,6 +11,7 @@ import {
 import "./readingCard.scss";
 import { Book } from "src/types/types";
 import { Link as ReactRouterLink } from "react-router-dom";
+import { getAuthors } from "src/utils/functions";
 
 export interface ReadingCardProps {
   book: Book;
@@ -19,6 +20,7 @@ export interface ReadingCardProps {
 const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
   const currentProgress = parseFloat(((book.currentPage / book.pageCount) * 100).toFixed(2));
   const coverImage = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
+  const author = getAuthors(book?.author?.split(', ') ?? [], 5);
   // const date = new Date(book.startDate);
   // const startedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   return (
@@ -53,7 +55,7 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
           <Grid templateColumns="repeat(2, 1fr)" width="100%">
             <GridItem className="readingCard__info">
               <Heading size="md">{book.title}</Heading>
-              <h2>Author: {book.author}</h2>
+              <h2>Author: {author}</h2>
               <h2>Year: {book.yearPublished}</h2>
               <h2>Pages: {book.pageCount}</h2>
             </GridItem>
