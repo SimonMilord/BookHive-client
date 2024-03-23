@@ -359,16 +359,19 @@ const BookInfoPage = (): JSX.Element => {
                     <strong>ISBN #: </strong>
                     {bookData?.isbn}
                   </Text>
-                  <Text>
+                  {bookData?.amazonId ? (
+                    <Text>
                     <strong>Find: </strong>
                     <Link
-                      href={`https://www.amazon.ca/dp/${bookData?.id}`}
+                      href={`https://www.amazon.ca/dp/${bookData?.amazonId}`}
+                      target="_blank"
                       textDecoration="underline"
                     >
                       {`${bookData?.title} on Amazon`}
                       <ExternalLinkIcon mx="2px" />
                     </Link>
                   </Text>
+                  ) : null}
                   <Text>
                     <strong>Subjects: </strong>
                     <HStack spacing={3} my={1} wrap="wrap">

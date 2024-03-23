@@ -21,6 +21,7 @@ export type Book = {
   rating: number,
   ratingsCount: number,
   notes: Note[],
+  amazonId: string,
 }
 
 export enum BookStatus {
@@ -56,5 +57,6 @@ export type SearchResult = {
   first_sentence: string,
   ratings_average: number,
   ratings_count: number,
+  id_amazon: string[],
 }
 

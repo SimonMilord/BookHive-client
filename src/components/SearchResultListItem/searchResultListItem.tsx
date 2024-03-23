@@ -96,23 +96,24 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
 
   const filteredResultToSendToServer = (result: SearchResult) => {
     const resultMap = {
-      title: result.title,
-      author: result.author_name?.join(', '),
-      coverId: result.cover_i,
+      title: result?.title,
+      author: result?.author_name?.join(', '),
+      coverId: result?.cover_i,
       status: "To Read",
-      isbn: result.isbn?.[0],
-      pageCount: result.number_of_pages_median,
-      language: result.language.join(', '),
-      genre: result.subject?.slice(0, 10).join(', '),
-      publisher: result.publisher?.slice(0, 5).join(', '),
-      yearPublished: result.first_publish_year,
+      isbn: result?.isbn?.[0],
+      pageCount: result?.number_of_pages_median,
+      language: result?.language?.join(', '),
+      genre: result?.subject?.slice(0, 10).join(', '),
+      publisher: result?.publisher?.slice(0, 5).join(', '),
+      yearPublished: result?.first_publish_year,
       currentPage: 0,
       startDate: null,
       finishedDate: null,
       excerpt: null,
-      firstSentence: result.first_sentence?.[0],
-      rating: Math.round(result.ratings_average),
-      ratingsCount: result.ratings_count,
+      firstSentence: result?.first_sentence?.[0],
+      rating: Math.round(result?.ratings_average),
+      ratingsCount: result?.ratings_count,
+      amazonId: result?.id_amazon.filter(item => item !== '').pop() || null,
     };
     return resultMap;
   };
