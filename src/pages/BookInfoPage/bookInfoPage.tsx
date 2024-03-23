@@ -180,6 +180,10 @@ const BookInfoPage = (): JSX.Element => {
   const authors = getAuthors(bookData?.author?.split(', ') ?? [], 5);
   const bookId = id ?? "";
 
+  const ratingsCount = `(${bookData?.ratingsCount} ratings)`;
+  const rating = `${bookData?.rating ?? "?"}/5`;
+  const ratingsString = `${rating} ${rating !== "?/5" ? ratingsCount : ""}`;
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -347,9 +351,8 @@ const BookInfoPage = (): JSX.Element => {
                   </Text>
                   <Text>
                     <strong>Rating: </strong>
-                    {bookData?.rating ?? "?"}/5 ({bookData?.ratingsCount}{" "}
-                    ratings)
-                  </Text>
+                    {ratingsString}
+                    </Text>
                   <Text>
                     <strong>Publisher: </strong>
                     {publisher}
