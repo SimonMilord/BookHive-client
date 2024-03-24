@@ -7,7 +7,6 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
   const [currentRating, setCurrentRating] = useState(myRating);
 
   useEffect(() => {
-    console.log('myRating:', myRating);
     if (myRating) {
       setCurrentRating(myRating);
     }

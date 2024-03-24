@@ -113,7 +113,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       firstSentence: result?.first_sentence?.[0],
       rating: Math.round(result?.ratings_average),
       ratingsCount: result?.ratings_count,
-      amazonId: result?.id_amazon.filter(item => item !== '').pop() || null,
+      amazonId: result?.id_amazon && result?.id_amazon.filter(item => item !== '').pop(),
     };
     return resultMap;
   };

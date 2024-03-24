@@ -42,7 +42,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   const [isError, setIsError] = useState<boolean>(false);
   const [updatedCurrentPage, setUpdatedCurrentPage] = useState<number>(currentPage);
   const [updatedStatus, setUpdatedStatus] = useState<string>(status);
-  const [updatedStartedDate, setUpdatedStartedDate] = useState<string>(startedDate);
+  const [updatedStartedDate, setUpdatedStartedDate] = useState<string | null>(startedDate);
   const [updatedFinishedDate, setUpdatedFinishedDate] = useState<string | null>(null);
   const toast = useToast();
 
@@ -56,7 +56,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
           currentPage: updatedCurrentPage,
           status: latestStatus,
           startedDate: updatedStartedDate,
-          finishedDate: updatedFinishedDate ?? updatedFinishedDate,
+          finishedDate: updatedFinishedDate,
         }),
       });
 
@@ -80,10 +80,18 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
     const newStatus = event.target.value;
     if (newStatus === "Finished") {
       setUpdatedFinishedDate(new Date().toString());
+      setUpdatedCurrentPage(pageCount);
+      setUpdatedStartedDate(startedDate);
     }
 
     if (newStatus === "Started") {
       setUpdatedStartedDate(new Date().toString());
+    }
+
+    if (newStatus === "To Read") {
+      setUpdatedStartedDate('Not started yet');
+      setUpdatedFinishedDate(null);
+      setUpdatedCurrentPage(0);
     }
 
     setUpdatedStatus(newStatus);
@@ -117,10 +125,14 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   };
 
   const handleStartedDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value > new Date().toISOString().split('T')[0]) {
+    setIsError(false);
+    const newDate = new Date(event.target.value).toISOString().split('T')[0];
+
+    if (newDate > new Date().toISOString().split('T')[0]) {
       setIsError(true);
     }
     setUpdatedStartedDate(event.target.value);
+    setUpdatedStatus('Started');
   };
 
   const getUpdatedStatus = (status: string) => {
