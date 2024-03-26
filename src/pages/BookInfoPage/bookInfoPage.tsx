@@ -39,9 +39,6 @@ import RatingStars from "src/components/RatingStars/ratingStars";
 
 const BookInfoPage = (): JSX.Element => {
   const { onOpen, onClose } = useDisclosure();
-  // Possible values: To Read | Reading | Finished
-  const [bookStatus, setBookStatus] = useState<string>("To Read");
-  const [bookStatusBtnLabel, setBookStatusBtnLabel] = useState<string>("Start");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [bookData, setBookData] = useState<Book>();
   const navigate = useNavigate();
@@ -51,44 +48,6 @@ const BookInfoPage = (): JSX.Element => {
   useEffect(() => {
     fetchBookData();
   }, []);
-
-  const onStatusBtnClick = async () => {
-    getStatusBtnLabel(bookData?.status || "Start");
-    try {
-      const response = await fetch(`http://localhost:8000/books/${bookId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentPage: bookData?.currentPage,
-          status: bookStatus,
-          startedDate: bookData?.startDate,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Unable to update status of the book");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getStatusBtnLabel = (bookStatus: string) => {
-    switch (bookStatus) {
-      case "To Read":
-        setBookStatus("Started");
-        setBookStatusBtnLabel("Finish");
-        break;
-      case "Started":
-        setBookStatus("Finished");
-        setBookStatusBtnLabel("Read again");
-        break;
-      default:
-        setBookStatus("To Read");
-        setBookStatusBtnLabel("Start");
-        break;
-    }
-  };
 
   // Fetch the book data from the server given the id
   const fetchBookData = async () => {
@@ -177,7 +136,7 @@ const BookInfoPage = (): JSX.Element => {
   const pageCount = bookData?.pageCount ?? 0;
   const genres = getGenres(bookData?.genre ?? "", 5);
   const publisher = bookData?.publisher.split(", ")[0];
-  const authors = getAuthors(bookData?.author?.split(', ') ?? [], 5);
+  const authors = getAuthors(bookData?.author?.split(", ") ?? [], 5);
   const bookId = id ?? "";
 
   const ratingsCount = `(${bookData?.ratingsCount} ratings)`;
@@ -207,7 +166,7 @@ const BookInfoPage = (): JSX.Element => {
           display={{ base: "none", md: "block" }}
         />
         <PageHeader onOpen={onOpen} />
-        <Box ml={{ base: 0, md: 60 }} p="4">
+        <Box ml={{ base: 0, md: 60 }} p="4" className="bookInfoPage__content">
           <VStack>
             <Container maxW="100%">
               <Box
@@ -227,14 +186,24 @@ const BookInfoPage = (): JSX.Element => {
                 <Box>
                   <ButtonGroup gap="2">
                     <Button
+                      className="bookInfoPage__updateLogButton"
+                      onClick={handleOpenModal}
                       colorScheme="blue"
-                      className="bookInfoPage__changeStatusButton"
-                      onClick={onStatusBtnClick}
                     >
-                      {bookStatusBtnLabel}
+                      Update
                     </Button>
+                    <UpdateLogModal
+                      isOpen={isModalOpen}
+                      onClose={handleCloseModal}
+                      onLogUpdate={handleLogUpdate}
+                      currentPage={currentPage}
+                      status={bookReadingStatus}
+                      startedDate={readingLogDate}
+                      bookId={bookId}
+                      pageCount={pageCount}
+                    />
                     <Button
-                      colorScheme="blue"
+                      colorScheme="red"
                       className="bookInfoPage__deleteBookButton"
                       onClick={() => handleDeleteBook(bookData?.title || "")}
                     >
@@ -306,25 +275,6 @@ const BookInfoPage = (): JSX.Element => {
                       %
                     </Text>
                   </GridItem>
-                  <GridItem display="flex" justifyContent="flex-end">
-                    <Button
-                      className="bookInfoPage__updateLogButton"
-                      onClick={handleOpenModal}
-                      colorScheme="blue"
-                    >
-                      Update
-                    </Button>
-                    <UpdateLogModal
-                      isOpen={isModalOpen}
-                      onClose={handleCloseModal}
-                      onLogUpdate={handleLogUpdate}
-                      currentPage={currentPage}
-                      status={bookReadingStatus}
-                      startedDate={readingLogDate}
-                      bookId={bookId}
-                      pageCount={pageCount}
-                    />
-                  </GridItem>
                 </Grid>
               </Box>
             </Container>
@@ -352,7 +302,7 @@ const BookInfoPage = (): JSX.Element => {
                   <Text>
                     <strong>Rating: </strong>
                     {ratingsString}
-                    </Text>
+                  </Text>
                   <Text>
                     <strong>Publisher: </strong>
                     {publisher}
@@ -363,16 +313,16 @@ const BookInfoPage = (): JSX.Element => {
                   </Text>
                   {bookData?.amazonId ? (
                     <Text>
-                    <strong>Find: </strong>
-                    <Link
-                      href={`https://www.amazon.ca/dp/${bookData?.amazonId}`}
-                      target="_blank"
-                      textDecoration="underline"
-                    >
-                      {`${bookData?.title} on Amazon`}
-                      <ExternalLinkIcon mx="2px" />
-                    </Link>
-                  </Text>
+                      <strong>Find: </strong>
+                      <Link
+                        href={`https://www.amazon.ca/dp/${bookData?.amazonId}`}
+                        target="_blank"
+                        textDecoration="underline"
+                      >
+                        {`${bookData?.title} on Amazon`}
+                        <ExternalLinkIcon mx="2px" />
+                      </Link>
+                    </Text>
                   ) : null}
                   <Text>
                     <strong>Subjects: </strong>
@@ -401,7 +351,10 @@ const BookInfoPage = (): JSX.Element => {
                     <Heading size="sm" my={4} mr={1}>
                       My rating:
                     </Heading>
-                    <RatingStars myRating={bookData?.myRating ?? null} bookId={bookData?.id ?? ""} />
+                    <RatingStars
+                      myRating={bookData?.myRating ?? null}
+                      bookId={bookData?.id ?? ""}
+                    />
                   </Box>
                 </Box>
                 <NotesList bookId={bookData?.id ?? ""}></NotesList>
