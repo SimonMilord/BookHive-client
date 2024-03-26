@@ -21,10 +21,8 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
   const currentProgress = parseFloat(((book.currentPage / book.pageCount) * 100).toFixed(2));
   const coverImage = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
   const author = getAuthors(book?.author?.split(', ') ?? [], 5);
-  // const date = new Date(book.startDate);
-  // const startedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
   return (
-    // Should change the value 1 after bug fix for the key in the DB change!
     <ChakraLink
       as={ReactRouterLink}
       to={`bookinfo/${book.id}`}
@@ -37,8 +35,8 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
         borderRadius={10}
         width={{ base: "100%", md: "100%" }}
         my={3}
-        backgroundColor={"gray.200"}
-        _hover={{ bg: "gray.300" }}
+        backgroundColor={"gray.100"}
+        _hover={{ bg: "gray.200" }}
         display="flex"
         flexDirection="column"
         justifyContent={"space-between"}
@@ -64,7 +62,6 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
               display="flex"
               justifyContent="flex-end"
             >
-              {/* <p>{startedDate}</p> */}
             </GridItem>
           </Grid>
         </Box>

@@ -166,28 +166,30 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
           {notes &&
             notes.map((note: Note) => (
               <ListItem key={note.id} className="notesList__item">
-                <Card
-                  p={5}
-                  flexDirection={"row"}
-                  justifyContent={"space-between"}
-                >
-                  <Text as="cite" maxWidth="80%">
-                    {note.content}
-                  </Text>
+                <Card p={5}>
                   <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="flex-start"
-                    maxWidth="20%"
+                    display={"flex"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                    mb={2}
                   >
-                    <Text>{getNoteDate(note.date)}</Text>
+                    <Text fontSize="sm" as="b" color={"gray.500"}>{getNoteDate(note.date)}</Text>
                     <Button
-                      colorScheme="blue"
+                      colorScheme="red"
                       variant="ghost"
                       onClick={() => handleDeleteNote(note.id)}
                     >
                       <FaRegTrashAlt />
                     </Button>
+                  </Box>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="flex-start"
+                  >
+                    <Text as="cite">
+                      {note.content}
+                    </Text>
                   </Box>
                 </Card>
               </ListItem>

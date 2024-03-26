@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { HStack, Icon, IconButton } from "@chakra-ui/react";
+import { HStack, Icon, IconButton, useToast } from "@chakra-ui/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
 const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ myRating, bookId }) => {
   const [hoveredIndex, setHoveredIndex] = useState(myRating);
   const [currentRating, setCurrentRating] = useState(myRating);
+  const toast = useToast();
 
   useEffect(() => {
     if (myRating) {
@@ -16,6 +17,9 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
   const handleRatingClick = (index: number) => () => {
     if (index !== currentRating) {
       setCurrentRating(index);
+    }
+    if (index === currentRating) {
+      return;
     }
     updateMyRating(index);
   };
@@ -34,6 +38,13 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
       if (!response.ok) {
         throw new Error("Unable to update rating");
       }
+
+      toast({
+        title: 'Rating updated!',
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      })
     } catch (error) {
       console.error(error);
     }
@@ -53,7 +64,7 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
   };
 
   return (
-    <HStack>
+    <HStack spacing={0}>
       {[1, 2, 3, 4, 5].map((index) => (
         <IconButton
           key={index}

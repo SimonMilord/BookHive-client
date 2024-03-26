@@ -65,12 +65,12 @@ export default function HomePage() {
             display={{ base: "none", md: "block" }}
           />
           <PageHeader onOpen={onOpen} />
-          <Box ml={{ base: 0, md: 60 }} p="4">
+          <Box ml={{ base: 0, md: 60 }} p="4" className="homepage__content">
             <Box>
               <Box>
                 <Heading>
                   Reading
-                  <Badge variant="solid" fontSize="1rem" ml={2}>
+                  <Badge variant="subtle" fontSize="1.5rem" ml={2} colorScheme="blue">
                     {readingBooks.length ?? 0}
                   </Badge>
                 </Heading>
@@ -86,7 +86,7 @@ export default function HomePage() {
               <Box>
                 <Heading>
                   To Read
-                  <Badge variant="solid" fontSize="1rem" ml={2}>
+                  <Badge variant="subtle" fontSize="1.5rem" ml={2} colorScheme="blue">
                     {toReadBooks.length ?? 0}
                   </Badge>
                 </Heading>
@@ -102,7 +102,7 @@ export default function HomePage() {
               <Box>
                 <Heading>
                   Finished
-                  <Badge variant="solid" fontSize="1rem" ml={2}>
+                  <Badge variant="subtle" fontSize="1.5rem" ml={2} colorScheme="blue">
                     {finishedBooks.length ?? 0}
                   </Badge>
                 </Heading>
