@@ -49,7 +49,6 @@ const BookInfoPage = (): JSX.Element => {
     fetchBookData();
   }, []);
 
-  // Fetch the book data from the server given the id
   const fetchBookData = async () => {
     try {
       const response = await fetch(`http://localhost:8000/books/${id}`, {
@@ -69,7 +68,6 @@ const BookInfoPage = (): JSX.Element => {
     }
   };
 
-  // Given a book id, delete it from the database
   const handleDeleteBook = async (title: string) => {
     try {
       const response = await fetch(`http://localhost:8000/books/${id}`, {

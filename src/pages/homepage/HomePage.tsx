@@ -29,8 +29,6 @@ export default function HomePage() {
     getToReadBooks();
   }, []);
 
-  // Should modify this method to filter the books are are being read to add them to the reading list instead.
-  // Or maybe parse the status on the server side and return the books in the right list
   const getToReadBooks = async () => {
     setIsLoading(true);
     try {

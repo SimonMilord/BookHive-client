@@ -16,9 +16,6 @@ import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import { getAuthors, getGenres } from "src/utils/functions";
 
-const imagePlaceholder =
-  "https://covers.openlibrary.org/b/isbn/0261102214-M.jpg"; // to replace later for proper placeholder
-
 export interface SearchResultListItemProps {
   result: SearchResult;
 }
@@ -132,9 +129,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       >
         <Image
           src={
-            `https://covers.openlibrary.org/b/id/${result.cover_i}-M.jpg` ||
-            imagePlaceholder
-          }
+            `https://covers.openlibrary.org/b/id/${result.cover_i}-M.jpg`}
           width="100%"
           h="100%"
           objectFit="contain"

@@ -16,6 +16,7 @@ interface LinkItemProps {
   icon: IconType;
   color: string;
 }
+
 // to change later: destinations for links for whatever sections we want
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", target: "/", icon: FiHome, color: 'black' },

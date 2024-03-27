@@ -1,13 +1,9 @@
-@use "./fonts" as *;
-
-// breakpoints
 $breakpoints: (
   small: 320px,
   medium: 768px,
   large: 1280px,
 );
 
-// colors
 $primary: #333333;
 $secondary: #FDB813;
 $font: #ffffff;

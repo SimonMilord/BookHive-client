@@ -25,7 +25,6 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
   };
 
   const updateMyRating = async (rating: number) => {
-    // Sends a request to update the rating
     try {
       const response = await fetch(`http://localhost:8000/books/${bookId}/rating`, {
         method: "PUT",
