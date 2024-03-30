@@ -11,7 +11,7 @@ import {
 import "./readingCard.scss";
 import { Book } from "src/types/types";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { getAuthors } from "src/utils/functions";
+import { getAuthors } from "src/utils/helperFunctions";
 
 export interface ReadingCardProps {
   book: Book;

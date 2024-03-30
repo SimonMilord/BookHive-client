@@ -14,7 +14,7 @@ import {
 import { SearchResult } from "src/types/types";
 import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
-import { getAuthors, getGenres } from "src/utils/functions";
+import { getAuthors, getGenres } from "src/utils/helperFunctions";
 
 export interface SearchResultListItemProps {
   result: SearchResult;

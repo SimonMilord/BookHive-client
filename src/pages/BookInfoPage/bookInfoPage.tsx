@@ -34,7 +34,7 @@ import NotesList from "src/components/NotesList/notesList";
 import UpdateLogModal from "src/components/UpdateLogModal/updateLogModal";
 import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
-import { getAuthors, getGenres } from "src/utils/functions";
+import { getAuthors, getGenres } from "src/utils/helperFunctions";
 import RatingStars from "src/components/RatingStars/ratingStars";
 
 const BookInfoPage = (): JSX.Element => {

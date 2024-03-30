@@ -1,4 +1,4 @@
-import { Center, Heading, VStack } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Heading } from "@chakra-ui/react";
 import "./Login.scss";
 import GoogleButton from "../../components/AuthGoogleBtn/authGoogleBtn";
 import Footer from "../../components/Footer/footer";
@@ -6,13 +6,15 @@ import Footer from "../../components/Footer/footer";
 export default function LoginPage() {
   return (
     <div className="login">
-      <Center>
-        <VStack>
-          <Heading>LOGIN PAGE</Heading>
-          <GoogleButton />
-        </VStack>
-      </Center>
-      <Footer />
+      <AbsoluteCenter className='login__card'>
+        <Heading>
+          BookHive
+        </Heading>
+        <GoogleButton />
+      </AbsoluteCenter>
+      <Box className='footer'>
+        <Footer />
+      </Box>
     </div>
   );
 }

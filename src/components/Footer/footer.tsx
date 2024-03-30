@@ -21,6 +21,7 @@ const Footer = (): JSX.Element => {
             aria-label="LinkedIn"
             icon={<FaLinkedin fontSize="1rem" />}
             m={0}
+            target="_blank"
           />
           <IconButton
             as="a"
@@ -28,6 +29,7 @@ const Footer = (): JSX.Element => {
             aria-label="GitHub"
             icon={<FaGithub fontSize="1rem" />}
             m={0}
+            target="_blank"
           />
         </ButtonGroup>
       </Flex>
