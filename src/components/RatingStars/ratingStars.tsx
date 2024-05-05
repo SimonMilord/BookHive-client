@@ -32,6 +32,7 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
         body: JSON.stringify({
           myRating: rating,
         }),
+        credentials: "include",
       });
 
       if (!response.ok) {

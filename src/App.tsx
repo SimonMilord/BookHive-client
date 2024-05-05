@@ -10,12 +10,17 @@ import SearchResultsPage from "./pages/SearchResultPage/searchResultsPage";
 import { SearchResult } from "./types/types";
 import { useState } from "react";
 import SearchContext from "./context/SearchContext";
+import PrivateRoute from './components/PrivateRoute/privateRoute';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      <Route index element={<HomePage />} />
+      <Route index element={<LoginPage />} />
+      {/* <Route path="home" element={<PrivateRoute><HomePage /></PrivateRoute>} /> */}
+      <Route path="home" element={<HomePage />} />
+      {/* <Route path="searchresults" element={<PrivateRoute><SearchResultsPage /></PrivateRoute>} /> */}
       <Route path="searchresults" element={<SearchResultsPage />} />
+      {/* <Route path="bookinfo/:id" element={<PrivateRoute><BookInfoPage /></PrivateRoute>} /> */}
       <Route path="bookinfo/:id" element={<BookInfoPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />

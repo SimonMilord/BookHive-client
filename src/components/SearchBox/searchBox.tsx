@@ -42,11 +42,12 @@ const SearchBox: React.FC<{}> = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/books/search/${query}&limit=50&offset=${resultPage}&lang=en`, // to change later when adding pagination
+        `http://localhost:8000/search/${query}&limit=50&offset=${resultPage}&lang=en`, // to change later when adding pagination
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-        }
+          credentials: "include",
+         }
       );
       if (!response.ok) {
         throw new Error(

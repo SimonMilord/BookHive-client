@@ -4,6 +4,7 @@ import GoogleButton from "../../components/AuthGoogleBtn/authGoogleBtn";
 import Footer from "../../components/Footer/footer";
 
 export default function LoginPage() {
+  // add props for when not authorized to view page and then show a toast or something
   return (
     <div className="login">
       <AbsoluteCenter className='login__card'>

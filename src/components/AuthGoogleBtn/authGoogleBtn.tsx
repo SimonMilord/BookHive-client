@@ -1,10 +1,10 @@
 import { FcGoogle } from "react-icons/fc";
 import { Button, Center, Text } from "@chakra-ui/react";
+import { login } from "../../utils/authRequests";
 
 const GoogleButton = (): JSX.Element => {
-  const onClick = () => {
-    // to do later when implementing google auth
-    console.log("logging in with google");
+  const onClick = async () => {
+    await login();
   };
 
   return (

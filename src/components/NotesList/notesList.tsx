@@ -37,13 +37,16 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
   const getBookNotes = async (id: string) => {
     try {
       const bookId = Number(id);
+
       const response = await fetch(
-        `http://localhost:8000/books/notes/${bookId}`,
+        `http://localhost:8000/notes/${bookId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         }
       );
+
       if (!response.ok) {
         throw new Error("Unable to fetch notes for bookId: " + bookId);
       }
@@ -61,11 +64,12 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
     const book_id = Number(bookId);
     try {
       const response = await fetch(
-        `http://localhost:8000/books/notes/${book_id}`,
+        `http://localhost:8000/notes/${book_id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content, book_id }),
+          credentials: "include",
         }
       );
 
@@ -114,10 +118,11 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
   const handleDeleteNote = async (noteId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/books/notes/${noteId}`,
+        `http://localhost:8000/notes/${noteId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         }
       );
 

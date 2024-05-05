@@ -3,7 +3,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  MenuDivider,
   Box,
   Flex,
   HStack,
@@ -12,9 +11,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FiChevronDown } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { logout } from "../../utils/authRequests";
 
 const NavMenu = (): JSX.Element => {
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
   return (
     <HStack spacing={{ base: "0", md: "6" }}>
       <Flex alignItems={"center"}>
@@ -43,13 +47,7 @@ const NavMenu = (): JSX.Element => {
             bg={useColorModeValue("white", "gray.900")}
             borderColor={useColorModeValue("gray.200", "gray.700")}
           >
-            <Link to="/profile">
-              <MenuItem>Profile</MenuItem>
-            </Link>
-            <MenuDivider />
-            <Link to="/login">
-              <MenuItem>Sign out</MenuItem>
-            </Link>
+            <MenuItem onClick={handleLogout}>Sign out</MenuItem>
           </MenuList>
         </Menu>
       </Flex>

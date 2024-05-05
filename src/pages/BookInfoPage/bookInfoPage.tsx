@@ -54,6 +54,7 @@ const BookInfoPage = (): JSX.Element => {
       const response = await fetch(`http://localhost:8000/books/${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include"
       });
       if (!response.ok) {
         throw new Error(
@@ -61,7 +62,6 @@ const BookInfoPage = (): JSX.Element => {
         );
       }
       const bookDataResponse = await response.json();
-      console.log(bookDataResponse);
       await setBookData(bookDataResponse);
     } catch (error) {
       console.error("Error fetching book data: " + error);
@@ -74,7 +74,9 @@ const BookInfoPage = (): JSX.Element => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title }),
+        credentials: "include",
       });
+
       if (!response.ok) {
         throw new Error("Unable to delete book from the library.");
       }
@@ -85,7 +87,7 @@ const BookInfoPage = (): JSX.Element => {
         duration: 5000,
         isClosable: true,
       });
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.error("Error deleting book: " + error);
     }
@@ -176,7 +178,7 @@ const BookInfoPage = (): JSX.Element => {
                 <ChakraLink
                   className="bookInfoPage__backButton"
                   as={ReactRouterLink}
-                  to="/"
+                  to="/home"
                   colorScheme="blue"
                 >
                   <IoArrowBack />

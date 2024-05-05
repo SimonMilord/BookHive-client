@@ -37,6 +37,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(resultToSend),
+          credentials: "include",
         });
 
         if (!response.ok) {
@@ -77,6 +78,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       const response = await fetch("http://localhost:8000/books/isbns", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -111,6 +113,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       rating: Math.round(result?.ratings_average),
       ratingsCount: result?.ratings_count,
       amazonId: result?.id_amazon && result?.id_amazon.filter(item => item !== '').pop(),
+      userId: null,
     };
     return resultMap;
   };

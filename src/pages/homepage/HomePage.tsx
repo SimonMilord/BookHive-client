@@ -36,13 +36,13 @@ export default function HomePage() {
       const response = await fetch("http://localhost:8000/books/", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
 
       if (!response.ok) {
         throw new Error("Unable to fetch books");
       }
       const fetchedToReadBooks = await response.json();
-      console.log(fetchedToReadBooks);
 
       setToReadBooks(fetchedToReadBooks.toReadBooks);
       setReadingBooks(fetchedToReadBooks.readingBooks);
@@ -68,7 +68,12 @@ export default function HomePage() {
               <Box>
                 <Heading>
                   Reading
-                  <Badge variant="subtle" fontSize="1.5rem" ml={2} colorScheme="blue">
+                  <Badge
+                    variant="subtle"
+                    fontSize="1.5rem"
+                    ml={2}
+                    colorScheme="blue"
+                  >
                     {readingBooks.length ?? 0}
                   </Badge>
                 </Heading>
@@ -84,7 +89,12 @@ export default function HomePage() {
               <Box>
                 <Heading>
                   To Read
-                  <Badge variant="subtle" fontSize="1.5rem" ml={2} colorScheme="blue">
+                  <Badge
+                    variant="subtle"
+                    fontSize="1.5rem"
+                    ml={2}
+                    colorScheme="blue"
+                  >
                     {toReadBooks.length ?? 0}
                   </Badge>
                 </Heading>
@@ -100,7 +110,12 @@ export default function HomePage() {
               <Box>
                 <Heading>
                   Finished
-                  <Badge variant="subtle" fontSize="1.5rem" ml={2} colorScheme="blue">
+                  <Badge
+                    variant="subtle"
+                    fontSize="1.5rem"
+                    ml={2}
+                    colorScheme="blue"
+                  >
                     {finishedBooks.length ?? 0}
                   </Badge>
                 </Heading>

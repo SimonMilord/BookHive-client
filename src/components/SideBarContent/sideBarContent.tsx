@@ -19,7 +19,7 @@ interface LinkItemProps {
 
 // to change later: destinations for links for whatever sections we want
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", target: "/", icon: FiHome, color: 'black' },
+  { name: "Home", target: "/home", icon: FiHome, color: 'black' },
   { name: "Reading Stats", target: "#", icon: FiActivity, color: 'grayText' },
   { name: "Discover Books", target: "#", icon: FiCompass, color: 'grayText' },
   { name: "Custom Lists", target: "#", icon: FiList, color: 'grayText' },
