@@ -54,7 +54,7 @@ const BookInfoPage = (): JSX.Element => {
       const response = await fetch(`http://localhost:8000/books/${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-        credentials: "include"
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error(
@@ -142,6 +142,7 @@ const BookInfoPage = (): JSX.Element => {
   const ratingsCount = `(${bookData?.ratingsCount} ratings)`;
   const rating = `${bookData?.rating ?? "?"}/5`;
   const ratingsString = `${rating} ${rating !== "?/5" ? ratingsCount : ""}`;
+  const currentProgress = currentPage === 0 ? 0 : ((currentPage / (bookData?.pageCount ?? 0)) * 100).toFixed(2);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -267,13 +268,7 @@ const BookInfoPage = (): JSX.Element => {
                   </GridItem>
                   <GridItem>
                     <Heading size="sm">Progress</Heading>
-                    <Text>
-                      {(
-                        (currentPage / (bookData?.pageCount ?? 0)) *
-                        100
-                      ).toFixed(2)}
-                      %
-                    </Text>
+                    <Text>{currentProgress}%</Text>
                   </GridItem>
                 </Grid>
               </Box>
