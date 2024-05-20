@@ -16,6 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
+import { serverURL } from "src/App";
 
 const statusOptions = ["To Read", "Started", "Finished"];
 interface UpdateLogModalProps {
@@ -49,7 +50,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   const handleUpdateReadingLog = async () => {
     try {
       const latestStatus = getUpdatedStatus(status);
-      const response = await fetch(`http://localhost:8000/books/${bookId}`, {
+      const response = await fetch(`${serverURL}/books/${bookId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -58,6 +59,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
           startedDate: updatedStartedDate,
           finishedDate: updatedFinishedDate,
         }),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -107,7 +109,6 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
       case newPage > 0 && newPage < pageCount:
         setUpdatedCurrentPage(newPage);
         setUpdatedStatus('Started');
-        setUpdatedStartedDate(new Date().toString());
         setIsError(false);
         break;
       case newPage === pageCount:

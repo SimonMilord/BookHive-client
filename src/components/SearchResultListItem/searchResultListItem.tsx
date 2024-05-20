@@ -15,6 +15,7 @@ import { SearchResult } from "src/types/types";
 import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import { getAuthors, getGenres } from "src/utils/helperFunctions";
+import { serverURL } from "src/App";
 
 export interface SearchResultListItemProps {
   result: SearchResult;
@@ -33,7 +34,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       try {
         // Will need to refactor this to use the server once deployed
         const resultToSend = filteredResultToSendToServer(result);
-        const response = await fetch("http://localhost:8000/books/add", {
+        const response = await fetch(`${serverURL}/books/add`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(resultToSend),
@@ -75,7 +76,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
   // Function to fetch all the ISBNs of the books in the library
   const fetchCurrentIsbnCodes = async (): Promise<string[]> => {
     try {
-      const response = await fetch("http://localhost:8000/books/isbns", {
+      const response = await fetch(`${serverURL}/books/isbns`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -25,7 +25,7 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
   return (
     <ChakraLink
       as={ReactRouterLink}
-      to={`bookinfo/${book.id}`}
+      to={`/bookinfo/${book.id}`}
       className="readingCard__link"
     >
       <Box

@@ -1,6 +1,8 @@
+import { serverURL } from "src/App";
+
 export const logout = async () => {
   try {
-    window.location.href = 'http://localhost:8000/logout'
+    window.location.href = `${serverURL}/logout`
   } catch (error) {
     console.error(error);
   }
@@ -8,7 +10,7 @@ export const logout = async () => {
 
 export const login = async () => {
   try{
-    window.location.href = 'http://localhost:8000/auth/google';
+    window.location.href = `${serverURL}/auth/google`;
   } catch (error) {
     console.error(error);
   }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HStack, Icon, IconButton, useToast } from "@chakra-ui/react";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { serverURL } from "src/App";
 
 const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ myRating, bookId }) => {
   const [hoveredIndex, setHoveredIndex] = useState(myRating);
@@ -26,7 +27,7 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
 
   const updateMyRating = async (rating: number) => {
     try {
-      const response = await fetch(`http://localhost:8000/books/${bookId}/rating`, {
+      const response = await fetch(`${serverURL}/books/${bookId}/rating`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

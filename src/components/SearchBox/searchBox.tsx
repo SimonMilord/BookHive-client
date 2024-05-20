@@ -12,6 +12,7 @@ import {
 import SearchContext from "src/context/SearchContext";
 import { useNavigate } from "react-router-dom";
 import { SearchResult } from "src/types/types";
+import { serverURL } from "src/App";
 const SearchBox: React.FC<{}> = () => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +43,7 @@ const SearchBox: React.FC<{}> = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/search/${query}&limit=50&offset=${resultPage}&lang=en`, // to change later when adding pagination
+        `${serverURL}/search/${query}&limit=50&offset=${resultPage}&lang=en`, // to change later when adding pagination
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
