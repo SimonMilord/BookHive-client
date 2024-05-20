@@ -165,7 +165,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
           <FormControl isInvalid={isError}>
             <Stack spacing={2}>
               <FormLabel>Status</FormLabel>
-              <Select variant="filled" onChange={handleChangeStatus} placeholder={status}>
+              <Select variant="filled" onChange={handleChangeStatus}>
                 {statusOptions.map((status) => (
                   <option key={status} value={status}>
                     {status}
