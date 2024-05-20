@@ -65,8 +65,8 @@ export default function HomePage() {
           />
           <PageHeader onOpen={onOpen} />
           <Box ml={{ base: 0, md: 60 }} p="4" className="homepage__content">
-            <Box>
-              <Box>
+            <Box display="flex" flexDirection="column" h="100%">
+              <Box flex={1}>
                 <Heading>
                   Reading
                   <Badge
@@ -87,7 +87,7 @@ export default function HomePage() {
                     ))}
                 </List>
               </Box>
-              <Box>
+              <Box flex={1}>
                 <Heading>
                   To Read
                   <Badge
@@ -108,7 +108,7 @@ export default function HomePage() {
                   <BookList booksArray={toReadBooks} />
                 )}
               </Box>
-              <Box>
+              <Box flex={1}>
                 <Heading>
                   Finished
                   <Badge
