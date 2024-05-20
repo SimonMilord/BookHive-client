@@ -77,6 +77,7 @@ const RatingStars: React.FC<{ myRating: number | null, bookId: string }> = ({ my
           colorScheme="blue"
           aria-label="rating"
           icon={handleRatingIcon(index)}
+          size={'sm'}
         />
       ))}
     </HStack>
