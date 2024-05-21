@@ -34,7 +34,7 @@ export default function HomePage() {
     setIsLoading(true);
     try {
       // will need to refactor how I want to make those calls and the path once deployed
-      const response = await fetch(`${serverURL}/books/`, {
+      const response = await fetch(`${serverURL}/books`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -43,14 +43,18 @@ export default function HomePage() {
       if (!response.ok) {
         throw new Error("Unable to fetch books");
       }
-      const fetchedToReadBooks = await response.json();
+      const fetchedUserBooks = await response.json();
 
-      setToReadBooks(fetchedToReadBooks.toReadBooks);
-      setReadingBooks(fetchedToReadBooks.readingBooks);
-      setFinishedBooks(fetchedToReadBooks.finishedBooks);
+      const toReadBooks = fetchedUserBooks.filter((book: { status: string; }) => book.status === 'To Read');
+      const readingBooks = fetchedUserBooks.filter((book: { status: string; }) => book.status === 'Started');
+      const finishedBooks = fetchedUserBooks.filter((book: { status: string; }) => book.status === 'Finished');
+
+      setToReadBooks(toReadBooks);
+      setReadingBooks(readingBooks);
+      setFinishedBooks(finishedBooks);
     } catch (error) {
       console.error(error);
-      setErrorMessage("Unable to fetch books to read from the server.");
+      setErrorMessage("Unable to fetch books from the server, seems like there was a problem");
     }
     setIsLoading(false);
   };
@@ -65,6 +69,7 @@ export default function HomePage() {
           />
           <PageHeader onOpen={onOpen} />
           <Box ml={{ base: 0, md: 60 }} p="4" className="homepage__content">
+            {errorMessage ? <Center>{errorMessage}</Center> : <></>}
             <Box display="flex" flexDirection="column" h="100%">
               <Box flex={1}>
                 <Heading>
@@ -99,7 +104,6 @@ export default function HomePage() {
                     {toReadBooks.length ?? 0}
                   </Badge>
                 </Heading>
-                {errorMessage ? <span>{errorMessage}</span> : <></>}
                 {isLoading ? (
                   <Center>
                     <Spinner />
@@ -120,7 +124,6 @@ export default function HomePage() {
                     {finishedBooks.length ?? 0}
                   </Badge>
                 </Heading>
-                {errorMessage ? <span>{errorMessage}</span> : <></>}
                 {isLoading ? (
                   <Center>
                     <Spinner />
