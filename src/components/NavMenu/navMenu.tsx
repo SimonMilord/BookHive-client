@@ -35,7 +35,7 @@ const NavMenu = (): JSX.Element => {
                 spacing="1px"
                 ml="2"
               >
-                {/* TO CHANGE LATER TO DYNAMIC USERNAME */}
+                {/* TO CHANGE LATER TO DYNAMIC USERNAME HERE */}
                 <Text fontSize="sm">Simon Milord</Text>
               </VStack>
               <Box display={{ base: "none", md: "flex" }}>

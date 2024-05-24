@@ -1,5 +1,4 @@
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
-import RootLayout from "./layouts/RootLayout";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import "./styles/_variables.scss";
@@ -10,21 +9,9 @@ import SearchResultsPage from "./pages/SearchResultPage/searchResultsPage";
 import { SearchResult } from "./types/types";
 import { useState } from "react";
 import SearchContext from "./context/SearchContext";
+import PrivateRoutes from "./utils/privateRoutes";
 
 export const serverURL = "http://localhost:8000";
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route index element={<LoginPage />} />
-      <Route path="home" element={<HomePage />} />
-      <Route path="searchresults" element={<SearchResultsPage />} />
-      <Route path="bookinfo/:id" element={<BookInfoPage />} />
-      <Route path="login" element={<LoginPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Route>
-  )
-)
 
 export default function App() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -32,7 +19,17 @@ export default function App() {
 
   return (
     <SearchContext.Provider value={{searchResults, setSearchResults, searchTerm, setSearchTerm}}>
-      <RouterProvider router={router}/>
+      <Router>
+        <Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route path="home" element={<HomePage />} />
+            <Route path="searchresults" element={<SearchResultsPage />} />
+            <Route path="bookinfo/:id" element={<BookInfoPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+          <Route path="login" element={<LoginPage />} />
+        </Routes>
+      </Router>
     </SearchContext.Provider>
   );
 }

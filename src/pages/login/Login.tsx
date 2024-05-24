@@ -1,17 +1,19 @@
-import { AbsoluteCenter, Box, Heading } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Center, Heading } from "@chakra-ui/react";
 import "./Login.scss";
 import GoogleButton from "../../components/AuthGoogleBtn/authGoogleBtn";
 import Footer from "../../components/Footer/footer";
+import { Spinner } from '@chakra-ui/react';
 
-export default function LoginPage() {
-  // add props for when not authorized to view page and then show a toast or something
+export default function LoginPage({ isLoading }: { isLoading?: boolean }) {
   return (
     <div className="login">
       <AbsoluteCenter className='login__card'>
-        <Heading>
+        <Heading mb={5}>
           BookHive
         </Heading>
-        <GoogleButton />
+        <Center>
+          {isLoading ? <Spinner size="lg"/> : <GoogleButton />}
+        </Center>
       </AbsoluteCenter>
       <Box className='footer'>
         <Footer />
