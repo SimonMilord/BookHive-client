@@ -3,17 +3,19 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Box,
   Flex,
   HStack,
   VStack,
   useColorModeValue,
-  Text,
+  Avatar
 } from "@chakra-ui/react";
-import { FiChevronDown } from "react-icons/fi";
 import { logout } from "../../utils/authRequests";
+import AuthProfileContext from "src/context/AuthProfileContext";
+import { useContext } from "react";
 
 const NavMenu = (): JSX.Element => {
+  const { authProfile } = useContext(AuthProfileContext);
+  const avatarSrc = authProfile?.avatar || "";
 
   const handleLogout = async () => {
     await logout();
@@ -35,12 +37,8 @@ const NavMenu = (): JSX.Element => {
                 spacing="1px"
                 ml="2"
               >
-                {/* TO CHANGE LATER TO DYNAMIC USERNAME HERE */}
-                <Text fontSize="sm">Simon Milord</Text>
+              <Avatar name={authProfile.userName} src={avatarSrc}/>
               </VStack>
-              <Box display={{ base: "none", md: "flex" }}>
-                <FiChevronDown />
-              </Box>
             </HStack>
           </MenuButton>
           <MenuList

@@ -18,18 +18,18 @@ export const login = async () => {
 
 export const checkAuth = async () => {
   try {
-    const response = await fetch(`${serverURL}/auth/check`, {
+    const response = await fetch(`${serverURL}/check-auth`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
 
-    if (!response.ok) {
-      throw new Error("Unable to check auth");
+    if (response.status === 401) {
+      throw new Error("Unauthorized to access this page, please login first");
     }
 
     const data = await response.json();
-    return data.isAuthenticated;
+    return data;
   } catch (error) {
     console.error(error);
     return false;

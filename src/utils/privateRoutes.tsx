@@ -1,28 +1,7 @@
 import {Outlet, Navigate} from "react-router-dom";
 import { useEffect, useState } from "react";
-import { serverURL } from "src/App";
 import LoginPage from "src/pages/Login/Login";
-
-const checkAuth = async () => {
-  try {
-    const response = await fetch(`${serverURL}/check-auth`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-
-    if (response.status === 401) {
-      throw new Error("Unauthorized to access this page, please login first");
-    }
-
-    const data = await response.json();
-
-    return data.isAuthenticated;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+import { checkAuth } from "./authRequests";
 
 const PrivateRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +9,8 @@ const PrivateRoutes = () => {
 
   useEffect(() => {
     const checkUserAuth = async () => {
-      const authStatus = await checkAuth();
-      setIsUserAuthenticated(authStatus);
+      const authResponse = await checkAuth();
+      setIsUserAuthenticated(authResponse.isAuthenticated);
       setIsLoading(false);
     };
 
