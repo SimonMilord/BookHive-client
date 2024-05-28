@@ -1,16 +1,20 @@
-import { FlexProps, Flex, Icon, Link } from "@chakra-ui/react";
-import { ReactText } from "react";
+import { FlexProps, Flex, Icon, Link as ChakraLink } from "@chakra-ui/react";
+import { useLocation, Link as ReactRouterLink, } from "react-router-dom";
 import { IconType } from "react-icons";
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
   target: string;
-  children: ReactText;
+  children: string;
 }
 const NavItem = ({ icon, children, target, ...rest }: NavItemProps): JSX.Element => {
+  const currentPage = useLocation().pathname;
+  const linkHref = currentPage === target ? undefined : target;
+
   return (
-    <Link
-      href={target}
+    <ChakraLink
+      as={ReactRouterLink}
+      to={linkHref}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
@@ -39,7 +43,7 @@ const NavItem = ({ icon, children, target, ...rest }: NavItemProps): JSX.Element
         )}
         {children}
       </Flex>
-    </Link>
+    </ChakraLink>
   );
 };
 

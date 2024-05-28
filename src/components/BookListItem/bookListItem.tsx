@@ -1,4 +1,5 @@
-import { GridItem, Image, Link } from "@chakra-ui/react";
+import { GridItem, Image, Link as ChakraLink } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from "react-router-dom";
 import './bookListItem.scss';
 
 export interface BookListItemProps {
@@ -8,14 +9,14 @@ export interface BookListItemProps {
 
 const BookListItem: React.FC<BookListItemProps>  = (props): JSX.Element => {
   const {id, imageId } = props;
-  const bookInfoLinkPath = `bookinfo/${id}`;
+  const bookInfoLinkPath = `/bookinfo/${id}`;
   const image = `https://covers.openlibrary.org/b/id/${imageId}-M.jpg`;
 
   return (
     <GridItem>
-      <Link href={bookInfoLinkPath} className='bookListItem__container'>
+      <ChakraLink as={ReactRouterLink} to={bookInfoLinkPath} className='bookListItem__container'>
         <Image src={image} fit='contain' maxH={200} h='100%' borderRadius='8px'/>
-      </Link>
+      </ChakraLink>
     </GridItem>
 
   );
