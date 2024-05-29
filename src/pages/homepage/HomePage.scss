@@ -1,8 +1,10 @@
+@import '../../styles/variables.scss';
+
 .homepage {
   min-height: 100vh;
 
   &__content {
-    background-color: #fff;
+    background-color: $white;
     height: calc(100vh - 80px);
   }
 };

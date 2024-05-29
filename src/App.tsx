@@ -1,8 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-import "./styles/_variables.scss";
-import "./App.scss";
 import LoginPage from "./pages/Login/Login";
 import BookInfoPage from "./pages/BookInfoPage/bookInfoPage";
 import SearchResultsPage from "./pages/SearchResultPage/searchResultsPage";
@@ -40,7 +37,7 @@ export default function App() {
               <Route path="home" element={<HomePage />} />
               <Route path="searchresults" element={<SearchResultsPage />} />
               <Route path="bookinfo/:id" element={<BookInfoPage />} />
-              <Route path="*" element={<NotFoundPage />} />
+              <Route path="*" element={<HomePage />} />
             </Route>
             <Route path="login" element={<LoginPage />} />
           </Routes>
