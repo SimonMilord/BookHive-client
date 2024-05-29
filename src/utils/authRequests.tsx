@@ -1,13 +1,5 @@
 import { serverURL } from "src/App";
 
-export const logout = async () => {
-  try {
-    window.location.href = `${serverURL}/logout`
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const login = async () => {
   try{
     window.location.href = `${serverURL}/auth/google`;
@@ -16,9 +8,17 @@ export const login = async () => {
   }
 };
 
+export const logout = async () => {
+  try {
+    window.location.href = `${serverURL}/auth/logout`
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const checkAuth = async () => {
   try {
-    const response = await fetch(`${serverURL}/check-auth`, {
+    const response = await fetch(`${serverURL}/auth/check`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
