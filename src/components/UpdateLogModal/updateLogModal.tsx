@@ -15,19 +15,20 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { serverURL } from "src/App";
 
 const statusOptions = ["To Read", "Started", "Finished"];
 interface UpdateLogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogUpdate: (currentPage: number, status: string, startedDate: string, bookId: string, pageCount: number) => void;
+  onLogUpdate: (currentPage: number, status: string, startedDate: string, bookId: string, pageCount: number, readingDuration: number) => void;
   currentPage: number;
   status: string,
   startedDate: string,
   bookId: string,
-  pageCount: number
+  pageCount: number,
+  readingDuration: number,
 }
 const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   isOpen,
@@ -36,7 +37,8 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   status,
   startedDate,
   bookId,
-  pageCount
+  pageCount,
+  readingDuration
 }) => {
   const initialRef = useRef<HTMLInputElement>(null);
   const finalRef = useRef(null);
@@ -45,7 +47,13 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   const [updatedStatus, setUpdatedStatus] = useState<string>(status);
   const [updatedStartedDate, setUpdatedStartedDate] = useState<string | null>(startedDate);
   const [updatedFinishedDate, setUpdatedFinishedDate] = useState<string | null>(null);
+  const [updatedReadingDuration, setUpdatedReadingDuration] = useState<number>(readingDuration);
   const toast = useToast();
+
+  useEffect(() => {
+    setUpdatedReadingDuration(getReadingDuration());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatedCurrentPage, updatedStatus, updatedStartedDate, updatedFinishedDate]);
 
   const handleUpdateReadingLog = async () => {
     try {
@@ -58,6 +66,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
           status: latestStatus,
           startedDate: updatedStartedDate,
           finishedDate: updatedFinishedDate,
+          readingDuration: updatedReadingDuration,
         }),
         credentials: "include",
       });
@@ -148,6 +157,17 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
       return new Date(startedDate).toISOString().split('T')[0];
     };
     return;
+  };
+
+  const getReadingDuration = () => {
+    const today: Date = new Date();
+    const latestDate: Date = updatedFinishedDate !== null ? new Date(updatedFinishedDate) : today;
+    const startedDay: Date = new Date(updatedStartedDate ?? today.toISOString());
+    const timeDifference: number = latestDate.getTime() - startedDay.getTime();
+    const daysDifference: number = Math.floor(
+      timeDifference / (1000 * 60 * 60 * 24)
+    );
+    return daysDifference > 0 ? daysDifference : 0;
   };
 
   return (

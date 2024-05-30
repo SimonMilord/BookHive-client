@@ -113,6 +113,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
       startDate: null,
       finishedDate: null,
       status: "To Read",
+      readingDuration: 0,
       myRating: 0,
     };
     return resultMap;

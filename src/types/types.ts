@@ -16,6 +16,7 @@ export type Book = {
   startDate: string | Date | null,
   finishedDate: string | Date | null,
   currentPage: number,
+  readingDuration: number,
   excerpt?: string,
   firstSentence: string,
   rating: number,

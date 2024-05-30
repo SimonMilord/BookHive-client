@@ -95,16 +95,6 @@ const BookInfoPage = (): JSX.Element => {
     }
   };
 
-  const getBookReadingDuration = (book?: Book) => {
-    const today: Date = new Date();
-    const startedDay: Date = new Date(book?.startDate ?? today.toISOString());
-    const timeDifference: number = today.getTime() - startedDay.getTime();
-    const daysDifference: number = Math.floor(
-      timeDifference / (1000 * 60 * 60 * 24)
-    );
-    return daysDifference > 0 ? daysDifference : 0;
-  };
-
   const getBookDate = (book?: Book) => {
     const startDate = book?.startDate
       ? new Date(book?.startDate).toLocaleDateString("en-US", {
@@ -131,7 +121,7 @@ const BookInfoPage = (): JSX.Element => {
     }
   };
 
-  const readingLogDuration = getBookReadingDuration(bookData);
+  const readingLogDuration = bookData?.readingDuration ?? 0;
   const readingLogDate = getBookDate(bookData);
   const currentPage = bookData?.currentPage ?? 0;
   const bookReadingStatus = bookData?.status ?? "To Read";
@@ -204,6 +194,7 @@ const BookInfoPage = (): JSX.Element => {
                       startedDate={readingLogDate}
                       bookId={bookId}
                       pageCount={pageCount}
+                      readingDuration={readingLogDuration}
                     />
                     <Button
                       colorScheme="red"
