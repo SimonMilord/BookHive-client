@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { SearchResult } from "src/types/types";
-import SearchResultListItem from "../SearchResultListItem/searchResultListItem";
+import SearchResultListItem from "c/SearchResultListItem/searchResultListItem";
 import { useContext } from "react";
 import SearchContext from "src/context/SearchContext";
 

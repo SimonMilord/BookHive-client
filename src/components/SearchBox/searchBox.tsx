@@ -17,7 +17,6 @@ const SearchBox: React.FC<{}> = () => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [resultPage, setResultPage] = useState<number>(0);
 
   const { setSearchResults, setSearchTerm } = useContext(SearchContext);
   const navigate = useNavigate();
@@ -43,7 +42,7 @@ const SearchBox: React.FC<{}> = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${serverURL}/search/${query}&limit=50&offset=${resultPage}&lang=en`, // to change later when adding pagination
+        `${serverURL}/search/${query}&limit=50&offset=${0}&lang=en`, // to change later when adding pagination
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

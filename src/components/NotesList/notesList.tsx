@@ -26,6 +26,7 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
 
   useEffect(() => {
     getBookNotes(bookId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookId]);
 
   useEffect(() => {
