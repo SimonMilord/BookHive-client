@@ -22,7 +22,7 @@ const statusOptions = ["To Read", "Started", "Finished"];
 interface UpdateLogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLogUpdate: (currentPage: number, status: string, startedDate: string, bookId: string, pageCount: number, readingDuration: number) => void;
+  onLogUpdate: (currentPage: number, status: string, startedDate: string, finishedDate: string, bookId: string, pageCount: number, readingDuration: number) => void;
   currentPage: number;
   status: string,
   startedDate: string,
@@ -33,6 +33,7 @@ interface UpdateLogModalProps {
 const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   isOpen,
   onClose,
+  onLogUpdate,
   currentPage,
   status,
   startedDate,
@@ -45,8 +46,8 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   const [isError, setIsError] = useState<boolean>(false);
   const [updatedCurrentPage, setUpdatedCurrentPage] = useState<number>(currentPage);
   const [updatedStatus, setUpdatedStatus] = useState<string>(status);
-  const [updatedStartedDate, setUpdatedStartedDate] = useState<string | null>(startedDate);
-  const [updatedFinishedDate, setUpdatedFinishedDate] = useState<string | null>(null);
+  const [updatedStartedDate, setUpdatedStartedDate] = useState<string>(startedDate);
+  const [updatedFinishedDate, setUpdatedFinishedDate] = useState<string>('');
   const [updatedReadingDuration, setUpdatedReadingDuration] = useState<number>(readingDuration);
   const toast = useToast();
 
@@ -75,7 +76,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
         throw new Error("Unable to update reading log");
       };
 
-      onClose();
+      onLogUpdate(updatedCurrentPage, latestStatus, updatedStartedDate, updatedFinishedDate, bookId, pageCount, updatedReadingDuration);
       toast({
         title: "Reading log successfully updated",
         status: "success",
@@ -101,7 +102,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
 
     if (newStatus === "To Read") {
       setUpdatedStartedDate('Not started yet');
-      setUpdatedFinishedDate(null);
+      setUpdatedFinishedDate('');
       setUpdatedCurrentPage(0);
     }
 

@@ -141,14 +141,12 @@ const BookInfoPage = (): JSX.Element => {
   };
 
   const handleCloseModal = async () => {
-    await fetchBookData();
     setIsModalOpen(false);
   };
 
-  const handleLogUpdate = (value: number) => {
-    // Call the server to update the current page
+  const handleLogUpdate = async () => {
+    await fetchBookData();
     setIsModalOpen(false);
-    fetchBookData();
   };
 
   return (
