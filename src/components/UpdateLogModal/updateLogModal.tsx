@@ -15,7 +15,7 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useRef, useState } from "react";
 import { serverURL } from "src/App";
 
 const statusOptions = ["To Read", "Started", "Finished"];
@@ -43,7 +43,8 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
 }) => {
   const initialRef = useRef<HTMLInputElement>(null);
   const finalRef = useRef(null);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isStartedDateError, setIsStartedDateError] = useState<boolean>(false);
+  const [isPagesError, setIsPagesError] = useState<boolean>(false);
   const [updatedCurrentPage, setUpdatedCurrentPage] = useState<number>(currentPage);
   const [updatedStatus, setUpdatedStatus] = useState<string>(status);
   const [updatedStartedDate, setUpdatedStartedDate] = useState<string>(startedDate);
@@ -51,20 +52,18 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
   const [updatedReadingDuration, setUpdatedReadingDuration] = useState<number>(readingDuration);
   const toast = useToast();
 
-  useEffect(() => {
-    setUpdatedReadingDuration(getReadingDuration());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updatedCurrentPage, updatedStatus, updatedStartedDate, updatedFinishedDate]);
-
   const handleUpdateReadingLog = async () => {
+    if (isPagesError || isStartedDateError) {
+      return;
+    }
+
     try {
-      const latestStatus = getUpdatedStatus(status);
       const response = await fetch(`${serverURL}/books/${bookId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           currentPage: updatedCurrentPage,
-          status: latestStatus,
+          status: updatedStatus,
           startedDate: updatedStartedDate,
           finishedDate: updatedFinishedDate,
           readingDuration: updatedReadingDuration,
@@ -76,7 +75,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
         throw new Error("Unable to update reading log");
       };
 
-      onLogUpdate(updatedCurrentPage, latestStatus, updatedStartedDate, updatedFinishedDate, bookId, pageCount, updatedReadingDuration);
+      onLogUpdate(updatedCurrentPage, updatedStatus, updatedStartedDate, updatedFinishedDate, bookId, pageCount, updatedReadingDuration);
       toast({
         title: "Reading log successfully updated",
         status: "success",
@@ -88,87 +87,96 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
     }
   };
 
+  const handleCloseModal = () => {
+    setIsPagesError(false);
+    setIsStartedDateError(false);
+    onClose();
+  };
+
   const handleChangeStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = event.target.value;
     if (newStatus === "Finished") {
       setUpdatedFinishedDate(new Date().toString());
       setUpdatedCurrentPage(pageCount);
       setUpdatedStartedDate(startedDate);
+      setReadingDuration(new Date(updatedStartedDate));
     }
 
     if (newStatus === "Started") {
       setUpdatedStartedDate(new Date().toString());
+      setReadingDuration(new Date(updatedStartedDate));
     }
 
     if (newStatus === "To Read") {
       setUpdatedStartedDate('Not started yet');
       setUpdatedFinishedDate('');
       setUpdatedCurrentPage(0);
+      setReadingDuration(new Date());
     }
-
     setUpdatedStatus(newStatus);
-    getUpdatedStatus(updatedStatus);
   };
 
   const handleCurrentPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newPage = parseInt(event.target.value);
     switch (true) {
       case newPage < 0 || newPage > pageCount:
-        setIsError(true);
+        setIsPagesError(true);
         break;
       case newPage > 0 && newPage < pageCount:
         setUpdatedCurrentPage(newPage);
-        setUpdatedStatus('Started');
-        setIsError(false);
+        if (updatedStartedDate === 'Not started yet') {
+          setUpdatedStatus('Started');
+          setUpdatedStartedDate(new Date().toString());
+        }
+        setReadingDuration(new Date(updatedStartedDate));
+        setIsPagesError(false);
         break;
       case newPage === pageCount:
         setUpdatedCurrentPage(newPage);
         setUpdatedStatus('Finished');
         setUpdatedFinishedDate(new Date().toString());
-        setIsError(false);
+        setReadingDuration(new Date(updatedStartedDate));
+        setIsPagesError(false);
         break;
       default:
         setUpdatedCurrentPage(0);
-        setUpdatedStatus('To Read');
-        setIsError(false);
+        setIsPagesError(false);
+        setReadingDuration(new Date());
         break;
     }
   };
 
   const handleStartedDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsError(false);
+    setIsStartedDateError(false);
     const newDate = new Date(event.target.value).toISOString().split('T')[0];
 
     if (newDate > new Date().toISOString().split('T')[0]) {
-      setIsError(true);
+      setIsStartedDateError(true);
+    } else {
+      setIsStartedDateError(false);
+      setUpdatedStartedDate(newDate);
+      setUpdatedStatus('Started');
     }
-    setUpdatedStartedDate(event.target.value);
-    setUpdatedStatus('Started');
+    setReadingDuration(new Date(newDate));
   };
 
-  const getUpdatedStatus = (status: string) => {
-    if (status === "To Read" && (updatedStartedDate !== null)) {
-      return "Started";
-    }
-    return updatedStatus;
-  };
-
-  const getDefaultDateValue = () => {
+  const getDefaultStartedDateValue = () => {
     if (startedDate !== 'Not started yet') {
       return new Date(startedDate).toISOString().split('T')[0];
     };
     return;
   };
 
-  const getReadingDuration = () => {
+  const setReadingDuration = (startedDateToUse: Date) => {
     const today: Date = new Date();
-    const latestDate: Date = updatedFinishedDate !== null ? new Date(updatedFinishedDate) : today;
-    const startedDay: Date = new Date(updatedStartedDate ?? today.toISOString());
+    const latestDate: Date = updatedFinishedDate !== '' ? new Date(updatedFinishedDate) : today;
+    const startedDay: Date = startedDateToUse;
     const timeDifference: number = latestDate.getTime() - startedDay.getTime();
     const daysDifference: number = Math.floor(
       timeDifference / (1000 * 60 * 60 * 24)
     );
-    return daysDifference > 0 ? daysDifference : 0;
+    const newDuration = daysDifference > 0 ? daysDifference : 0;
+    setUpdatedReadingDuration(newDuration);
   };
 
   return (
@@ -176,18 +184,18 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleCloseModal}
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Update Reading Log</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
-          <FormControl isInvalid={isError}>
+          <FormControl isInvalid={isPagesError || isStartedDateError}>
             <Stack spacing={2}>
               <FormLabel>Status</FormLabel>
-              <Select variant="filled" onChange={handleChangeStatus}>
-                {statusOptions.map((status) => (
+              <Select variant="filled" onChange={handleChangeStatus} placeholder={status}>
+                {statusOptions.filter((statusOption) => statusOption !== status).map((status) => (
                   <option key={status} value={status}>
                     {status}
                   </option>
@@ -198,7 +206,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
               <Input
                 size="md"
                 type="date"
-                defaultValue={getDefaultDateValue()}
+                defaultValue={getDefaultStartedDateValue()}
                 onChange={(e) => handleStartedDateChange(e)}
               />
               <FormLabel>Current page</FormLabel>
@@ -217,9 +225,14 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
                   handleCurrentPageChange(e);
                 }}
               />
-              {isError ? (
+              {isPagesError ? (
                 <FormErrorMessage>
-                  Please enter a valid page number
+                  Please enter a valid page number between 0 and {pageCount}
+                </FormErrorMessage>
+              ) : null}
+              {isStartedDateError ? (
+                <FormErrorMessage>
+                  You cannot set a future date as the started date
                 </FormErrorMessage>
               ) : null}
             </Stack>
@@ -230,7 +243,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
           <Button colorScheme="blue" mr={3} onClick={handleUpdateReadingLog}>
             Save
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={handleCloseModal}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
