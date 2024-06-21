@@ -48,7 +48,7 @@ const BookInfoPage = (): JSX.Element => {
 
   useEffect(() => {
     fetchBookData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchBookData = async () => {
@@ -134,7 +134,10 @@ const BookInfoPage = (): JSX.Element => {
   const ratingsCount = `(${bookData?.ratingsCount} ratings)`;
   const rating = `${bookData?.rating ?? "?"}/5`;
   const ratingsString = `${rating} ${rating !== "?/5" ? ratingsCount : ""}`;
-  const currentProgress = currentPage === 0 ? 0 : ((currentPage / (bookData?.pageCount ?? 0)) * 100).toFixed(2);
+  const currentProgress =
+    currentPage === 0
+      ? 0
+      : ((currentPage / (bookData?.pageCount ?? 0)) * 100).toFixed(2);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -298,8 +301,10 @@ const BookInfoPage = (): JSX.Element => {
                     {bookData?.isbn}
                   </Text>
                   {bookData?.amazonId ? (
-                    <Text>
-                      <strong>Find: </strong>
+                    <Box>
+                      <Text>
+                        <strong>Find: </strong>
+                      </Text>
                       <Link
                         href={`https://www.amazon.ca/dp/${bookData?.amazonId}`}
                         target="_blank"
@@ -308,23 +313,23 @@ const BookInfoPage = (): JSX.Element => {
                         {`${bookData?.title} on Amazon`}
                         <ExternalLinkIcon mx="2px" />
                       </Link>
-                    </Text>
+                    </Box>
                   ) : null}
                   <Text>
                     <strong>Subjects: </strong>
-                    <HStack spacing={3} my={1} wrap="wrap">
-                      {genres?.map((subject, index) => (
-                        <Tag
-                          key={index}
-                          size="md"
-                          variant="subtle"
-                          colorScheme="blue"
-                        >
-                          <TagLabel>{subject}</TagLabel>
-                        </Tag>
-                      ))}
-                    </HStack>
                   </Text>
+                  <HStack spacing={3} my={1} wrap="wrap">
+                    {genres?.map((subject, index) => (
+                      <Tag
+                        key={index}
+                        size="md"
+                        variant="subtle"
+                        colorScheme="blue"
+                      >
+                        <TagLabel>{subject}</TagLabel>
+                      </Tag>
+                    ))}
+                  </HStack>
                 </VStack>
               </Box>
             </Container>
