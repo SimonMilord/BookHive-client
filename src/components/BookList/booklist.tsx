@@ -1,5 +1,5 @@
 import { Grid } from "@chakra-ui/react";
-import BookListItem from "c/BookListItem/bookListItem";
+import BookListItem from "../BookListItem/bookListItem";
 import { Book } from "src/types/types";
 
 interface BookListProps {

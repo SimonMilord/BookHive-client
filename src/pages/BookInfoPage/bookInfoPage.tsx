@@ -26,16 +26,16 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import PageHeader from "c/PageHeader/pageHeader";
-import SidebarContent from "c/SideBarContent/sideBarContent";
+import PageHeader from "../../components/PageHeader/pageHeader";
+import SidebarContent from "../../components/SideBarContent/sideBarContent";
 import { Book } from "src/types/types";
 import { useEffect, useState } from "react";
-import NotesList from "c/NotesList/notesList";
-import UpdateLogModal from "c/UpdateLogModal/updateLogModal";
+import NotesList from "../../components/NotesList/notesList";
+import UpdateLogModal from "../../components/UpdateLogModal/updateLogModal";
 import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
 import { getAuthors, getGenres } from "src/utils/helperFunctions";
-import RatingStars from "c/RatingStars/ratingStars";
+import RatingStars from "../../components/RatingStars/ratingStars";
 import { serverURL } from "src/App";
 
 const BookInfoPage = (): JSX.Element => {

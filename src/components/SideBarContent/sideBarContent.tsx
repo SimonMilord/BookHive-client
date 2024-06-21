@@ -6,7 +6,7 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
-import NavItem from "c/NavItem/navItem";
+import NavItem from "../NavItem/navItem";
 import { IconType } from "react-icons";
 import { FiHome, FiCompass, FiList, FiAward, FiActivity } from "react-icons/fi";
 

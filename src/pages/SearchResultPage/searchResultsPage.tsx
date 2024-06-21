@@ -3,9 +3,9 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import SidebarContent from "c/SideBarContent/sideBarContent";
-import PageHeader from "c/PageHeader/pageHeader";
-import SearchResultList from "c/SearchResultList/searchResultList";
+import SidebarContent from "../../components/SideBarContent/sideBarContent";
+import PageHeader from "../../components/PageHeader/pageHeader";
+import SearchResultList from "../../components/SearchResultList/searchResultList";
 
 const SearchResultsPage: React.FC = () => {
   const { onOpen, onClose } = useDisclosure();

@@ -6,8 +6,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
-import NavMenu from "c/NavMenu/navMenu";
-import SearchBox from "c/SearchBox/searchBox";
+import NavMenu from "../NavMenu/navMenu";
+import SearchBox from "../SearchBox/searchBox";
 
 interface PageHeaderProps extends FlexProps {
   onOpen: () => void;

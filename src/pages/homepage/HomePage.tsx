@@ -9,11 +9,11 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import PageHeader from "c/PageHeader/pageHeader";
-import SidebarContent from "c/SideBarContent/sideBarContent";
+import PageHeader from "../../components/PageHeader/pageHeader";
+import SidebarContent from "../../components/SideBarContent/sideBarContent";
 import "./HomePage.scss";
-import BookList from "c/BookList/bookList";
-import ReadingCard from "c/ReadingCard/readingCard";
+import BookList from "../../components/BookList/bookList";
+import ReadingCard from "../../components/ReadingCard/readingCard";
 import { useEffect, useState } from "react";
 import { Book } from "src/types/types";
 import { serverURL } from "src/App";

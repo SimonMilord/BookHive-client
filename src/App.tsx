@@ -1,8 +1,8 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import HomePage from "p/HomePage/HomePage";
-import LoginPage from "p/Login/Login";
-import BookInfoPage from "p/BookInfoPage/bookInfoPage";
-import SearchResultsPage from "p/SearchResultPage/searchResultsPage";
+import HomePage from "src/pages/HomePage/HomePage";
+import LoginPage from "src/pages/Login/Login";
+import BookInfoPage from "src/pages/BookInfoPage/bookInfoPage";
+import SearchResultsPage from "src/pages/SearchResultPage/searchResultsPage";
 import { SearchResult } from "./types/types";
 import { useEffect, useState } from "react";
 import SearchContext from "./context/SearchContext";
