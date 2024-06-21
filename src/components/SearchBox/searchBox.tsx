@@ -17,6 +17,7 @@ const SearchBox: React.FC<{}> = () => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const abortController = useRef<AbortController | null>(null);
 
   const { setSearchResults, setSearchTerm } = useContext(SearchContext);
   const navigate = useNavigate();
@@ -40,6 +41,14 @@ const SearchBox: React.FC<{}> = () => {
     handleClearInput();
     setSearchTerm(query);
     setIsLoading(true);
+
+    // If there is a request currently in progress, abort it
+    if (abortController.current) {
+      abortController.current.abort();
+    }
+
+    abortController.current = new AbortController();
+
     try {
       const response = await fetch(
         `${serverURL}/search/${query}&limit=50&offset=${0}&lang=en`, // to change later when adding pagination
@@ -47,6 +56,7 @@ const SearchBox: React.FC<{}> = () => {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
+          signal: abortController.current.signal,
          }
       );
       if (!response.ok) {
@@ -60,7 +70,10 @@ const SearchBox: React.FC<{}> = () => {
       const parsedSearchResults = rawSearchResults.filter((result: SearchResult) => result.cover_i !== undefined);
       setSearchResults(parsedSearchResults);
     } catch (error) {
-      console.error(error);
+      if ((error as Error).name === "AbortError") {
+        console.log("Search request aborted");
+      }
+      console.warn(error);
     }
     setIsLoading(false);
   };
