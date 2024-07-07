@@ -12,6 +12,7 @@ import "./readingCard.scss";
 import { Book } from "src/types/types";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { getAuthors } from "src/utils/helperFunctions";
+import { placeholderImage } from "src/App";
 
 export interface ReadingCardProps {
   book: Book;
@@ -19,7 +20,8 @@ export interface ReadingCardProps {
 
 const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
   const currentProgress = parseFloat(((book.currentPage / book.pageCount) * 100).toFixed(2));
-  const coverImage = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
+  // const coverImage = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
+  const coverImage = placeholderImage;
   const author = getAuthors(book?.author?.split(', ') ?? [], 5);
 
   return (
@@ -47,6 +49,7 @@ const ReadingCard: React.FC<ReadingCardProps> = ({ book }): JSX.Element => {
               boxSize="150px"
               objectFit="contain"
               src={coverImage}
+              loading='lazy'
               alt="Placeholder book cover"
             />
           </Box>

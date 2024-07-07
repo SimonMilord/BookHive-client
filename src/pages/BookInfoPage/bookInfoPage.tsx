@@ -36,7 +36,7 @@ import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
 import { getAuthors, getGenres } from "src/utils/helperFunctions";
 import RatingStars from "../../components/RatingStars/ratingStars";
-import { serverURL } from "src/App";
+import { placeholderImage, serverURL } from "src/App";
 
 const BookInfoPage = (): JSX.Element => {
   const { onOpen, onClose } = useDisclosure();
@@ -211,12 +211,14 @@ const BookInfoPage = (): JSX.Element => {
               <Box className="bookInfoPage__topSection">
                 <Flex>
                   <Image
-                    src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
+                    // src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
+                    src={placeholderImage}
                     fit="contain"
                     minH={200}
                     maxH={250}
                     maxW="fit-content"
                     borderRadius="8px"
+                    loading='lazy'
                   />
                   <Box ml={5}>
                     <Text>

@@ -136,6 +136,7 @@ const SearchResultListItem = ({ result }: SearchResultListItemProps) => {
             `https://covers.openlibrary.org/b/id/${result.cover_i}-M.jpg`}
           width="100%"
           h="100%"
+          loading='lazy'
           objectFit="contain"
           alt={result.title}
         />
