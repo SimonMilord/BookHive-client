@@ -10,7 +10,6 @@ import AuthProfileContext from "./context/AuthProfileContext";
 import PrivateRoutes from "./utils/privateRoutes";
 import { checkAuth } from "./utils/authRequests";
 
-export const serverURL = "http://localhost:8000";
 export default function App() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");

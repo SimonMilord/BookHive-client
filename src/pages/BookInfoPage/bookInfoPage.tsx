@@ -36,7 +36,6 @@ import { ExternalLinkIcon, DeleteIcon } from "@chakra-ui/icons";
 import { IoArrowBack } from "react-icons/io5";
 import { getAuthors, getGenres } from "src/utils/helperFunctions";
 import RatingStars from "../../components/RatingStars/ratingStars";
-import { placeholderImage, serverURL } from "src/App";
 
 const BookInfoPage = (): JSX.Element => {
   const { onOpen, onClose } = useDisclosure();
@@ -53,7 +52,7 @@ const BookInfoPage = (): JSX.Element => {
 
   const fetchBookData = async () => {
     try {
-      const response = await fetch(`${serverURL}/books/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books/${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -72,7 +71,7 @@ const BookInfoPage = (): JSX.Element => {
 
   const handleDeleteBook = async (title: string) => {
     try {
-      const response = await fetch(`${serverURL}/books/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title }),

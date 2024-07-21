@@ -1,4 +1,4 @@
-import { serverURL } from "src/App";
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 export const login = async () => {
   try{

@@ -11,7 +11,6 @@ import {
 import { ChangeEvent, useEffect, useState } from "react";
 import { Note } from "src/types/types";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { serverURL } from "src/App";
 
 interface NotesListProps {
   bookId: string;
@@ -41,7 +40,7 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
       const bookId = Number(id);
 
       const response = await fetch(
-        `${serverURL}/notes/${bookId}`,
+        `${process.env.REACT_APP_SERVER_URL}/notes/${bookId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -66,7 +65,7 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
     const book_id = Number(bookId);
     try {
       const response = await fetch(
-        `${serverURL}/notes/${book_id}`,
+        `${process.env.REACT_APP_SERVER_URL}/notes/${book_id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -120,7 +119,7 @@ const NotesList = ({ bookId }: NotesListProps): JSX.Element => {
   const handleDeleteNote = async (noteId: string) => {
     try {
       const response = await fetch(
-        `${serverURL}/notes/${noteId}`,
+        `${process.env.REACT_APP_SERVER_URL}/notes/${noteId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },

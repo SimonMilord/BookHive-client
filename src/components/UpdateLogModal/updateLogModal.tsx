@@ -16,7 +16,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, {useRef, useState } from "react";
-import { serverURL } from "src/App";
 
 const statusOptions = ["To Read", "Started", "Finished"];
 interface UpdateLogModalProps {
@@ -58,7 +57,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({
     }
 
     try {
-      const response = await fetch(`${serverURL}/books/${bookId}`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books/${bookId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

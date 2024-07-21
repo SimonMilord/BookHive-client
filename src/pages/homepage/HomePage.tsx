@@ -16,7 +16,6 @@ import BookList from "../../components/BookList/bookList";
 import ReadingCard from "../../components/ReadingCard/readingCard";
 import { useEffect, useState } from "react";
 import { Book } from "src/types/types";
-import { serverURL } from "src/App";
 
 export default function HomePage() {
   const { onOpen, onClose } = useDisclosure();
@@ -34,7 +33,7 @@ export default function HomePage() {
     setIsLoading(true);
     try {
       // will need to refactor how I want to make those calls and the path once deployed
-      const response = await fetch(`${serverURL}/books`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
