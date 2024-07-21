@@ -1,7 +1,6 @@
 import { GridItem, Image, Link as ChakraLink } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import './bookListItem.scss';
-import { placeholderImage } from "src/App";
 
 export interface BookListItemProps {
   id: string,
@@ -11,8 +10,7 @@ export interface BookListItemProps {
 const BookListItem: React.FC<BookListItemProps>  = (props): JSX.Element => {
   const {id, imageId } = props;
   const bookInfoLinkPath = `/bookinfo/${id}`;
-  // const image = `https://covers.openlibrary.org/b/id/${imageId}-M.jpg`;
-  const image = placeholderImage;
+  const image = `https://covers.openlibrary.org/b/id/${imageId}-M.jpg`;
 
   return (
     <GridItem>

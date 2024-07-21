@@ -11,7 +11,6 @@ import PrivateRoutes from "./utils/privateRoutes";
 import { checkAuth } from "./utils/authRequests";
 
 export const serverURL = "http://localhost:8000";
-export const placeholderImage = 'https://m.media-amazon.com/images/I/71k--OLmZKL._AC_UF1000,1000_QL80_.jpg';
 export default function App() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");

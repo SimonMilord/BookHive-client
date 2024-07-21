@@ -211,8 +211,7 @@ const BookInfoPage = (): JSX.Element => {
               <Box className="bookInfoPage__topSection">
                 <Flex>
                   <Image
-                    // src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
-                    src={placeholderImage}
+                    src={`https://covers.openlibrary.org/b/id/${bookData?.coverId}-M.jpg`}
                     fit="contain"
                     minH={200}
                     maxH={250}
